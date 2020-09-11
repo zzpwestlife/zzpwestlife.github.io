@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="HTTP 2.0即超文本传输协议 2.0，是下一代HTTP协议.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 安装 http2 支持">
+<meta property="og:url" content="http://zouzhipeng.com/2017/01/17/Linux-%E5%AE%89%E8%A3%85-http2-%E6%94%AF%E6%8C%81/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="HTTP 2.0即超文本传输协议 2.0，是下一代HTTP协议.">
+<meta property="og:locale">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/693141-ffa57dd27771a53c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/693141-3e7fd6d43ffe52c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2017-01-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.034Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="http2">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/693141-ffa57dd27771a53c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<link rel="canonical" href="http://zouzhipeng.com/2017/01/17/Linux-%E5%AE%89%E8%A3%85-http2-%E6%94%AF%E6%8C%81/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Linux 安装 http2 支持 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          المحتويات
+        </li>
+        <li class="sidebar-nav-overview">
+          عام
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">المقالات</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">التصنيفات</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">الوسوم</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2017/01/17/Linux-%E5%AE%89%E8%A3%85-http2-%E6%94%AF%E6%8C%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 安装 http2 支持
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">نُشر في</span>
+
+      <time title="أُنشأ: 2017-01-17 00:00:00" itemprop="dateCreated datePublished" datetime="2017-01-17T00:00:00+08:00">2017-01-17</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">عُدل في</span>
+        <time title="عُدل: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+      </span>
+
+  
+</div>
+
+            <div class="post-description">HTTP 2.0即超文本传输协议 2.0，是下一代HTTP协议.</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="http://upload-images.jianshu.io/upload_images/693141-ffa57dd27771a53c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<a id="more"></a>
+
+<ol>
+<li><p>前提：服务器中已有 git，如果没有，输入下面的命令安装</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y tmux curl vim wget htop git</span><br></pre></td></tr></table></figure></li>
+<li><p>curl请求一个需使用 http2 的网址，查看响应结果，为http1.1，说明暂时还不支持http2</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    vagrant@homestead:~$ curl -I https:&#x2F;&#x2F;nghttp2.org&#x2F;</span><br><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Date: Tue, 28 Mar 2017 04:58:27 GMT</span><br><span class="line">Content-Type: text&#x2F;html</span><br><span class="line">Last-Modified: Mon, 27 Mar 2017 14:39:24 GMT</span><br><span class="line">Etag: &quot;58d9241c-19ff&quot;</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Content-Length: 6655</span><br><span class="line">X-Backend-Header-Rtt: 0.001072</span><br><span class="line">Strict-Transport-Security: max-age&#x3D;31536000</span><br><span class="line">Server: nghttpx</span><br><span class="line">Via: 2 nghttpx</span><br><span class="line">x-frame-options: SAMEORIGIN</span><br><span class="line">x-xss-protection: 1; mode&#x3D;block</span><br><span class="line">x-content-type-options: nosniff</span><br></pre></td></tr></table></figure>
+<p> 如果强制使用http2请求，无法得到响应</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vagrant@homestead:~$ curl --http2 -I https:&#x2F;&#x2F;nghttp2.org&#x2F;</span><br><span class="line">curl: (1) Unsupported protocol</span><br></pre></td></tr></table></figure></li>
+<li><p>安装 nghttp2</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># Get build requirements</span><br><span class="line"># Some of these are used for the Python bindings</span><br><span class="line"># this package also installs</span><br><span class="line">sudo apt-get install g++ make binutils autoconf automake autotools-dev libtool pkg-config \</span><br><span class="line">zlib1g-dev libcunit1-dev libssl-dev libxml2-dev       libev-dev libevent-dev libjansson-dev \</span><br><span class="line">libjemalloc-dev cython python3-dev python-setuptools</span><br><span class="line"></span><br><span class="line"># Build nghttp2 from source</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;tatsuhiro-t&#x2F;nghttp2.git</span><br><span class="line">cd nghttp2</span><br><span class="line">autoreconf -i</span><br><span class="line">automake</span><br><span class="line">autoconf</span><br><span class="line">.&#x2F;configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure></li>
+<li><p>升级最新版的 curl，<a target="_blank" rel="noopener" href="https://curl.haxx.se/download.html">这里</a>查看curl版本</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">sudo apt-get build-dep curl</span><br><span class="line">wget http:&#x2F;&#x2F;curl.haxx.se&#x2F;download&#x2F;curl-7.xx.0.tar.bz2</span><br><span class="line">tar -xvjf curl-7.xx.0.tar.bz2</span><br><span class="line">cd curl-7.xx.0</span><br><span class="line">.&#x2F;configure --with-nghttp2&#x3D;&#x2F;usr&#x2F;local --with-ssl</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>尝试再次连接</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Try this out first</span><br><span class="line">curl --http2 -I nghttp2.org</span><br><span class="line"></span><br><span class="line"># If you get errors, try setting this constant</span><br><span class="line"># to tell curl where to find shared libraries</span><br><span class="line">LD_LIBRARY_PATH&#x3D;&#x2F;usr&#x2F;local&#x2F;lib &#x2F;usr&#x2F;local&#x2F;bin&#x2F;curl --http2 -I nghttp2.org</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>连接</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vagrant@homestead:~&#x2F;curl-7.xx.0$ LD_LIBRARY_PATH&#x3D;&#x2F;usr&#x2F;local&#x2F;lib &#x2F;usr&#x2F;local&#x2F;bin&#x2F;curl --http2 -k -I -H &quot;Host: example.com&quot; https:&#x2F;&#x2F;localhost</span><br><span class="line">HTTP&#x2F;2.0 403</span><br><span class="line">server:nginx&#x2F;1.11.9</span><br><span class="line">date:Tue, 28 Mar 2017 05:47:10 GMT</span><br><span class="line">content-type:text&#x2F;html; charset&#x3D;utf-8</span><br><span class="line">content-length:169</span><br></pre></td></tr></table></figure></li>
+<li><p>打印出phpinfo<br>curl 的http2 显示 yes，表示成功。否则需要手动安装php的http扩展。</p>
+</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/693141-3e7fd6d43ffe52c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/http2/" rel="tag"># http2</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/01/12/Mac-%E5%90%AF%E5%8A%A8%E5%8A%A0%E8%BD%BD%E6%96%87%E4%BB%B6%E9%A1%BA%E5%BA%8F%E9%97%AE%E9%A2%98/" rel="prev" title="Mac 启动加载文件顺序问题">
+                  <i class="fa fa-chevron-left"></i> Mac 启动加载文件顺序问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/01/31/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91Linux-%E5%BC%80%E5%90%AF-php-%E7%9A%84-openssl%E6%89%A9%E5%B1%95/" rel="next" title="【记录】Linux 开启 php 的 openssl 扩展">
+                  【记录】Linux 开启 php 的 openssl 扩展 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

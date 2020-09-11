@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="在终端的文件夹跳转非常麻烦, 需要敲长长的路径. alias 别名也不是很方便。autojump 是通过记录进入过的目录到数据库来实现的, 所以必须是曾经进入过的目录才能跳转.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 懒人工具--autojump">
+<meta property="og:url" content="http://zouzhipeng.com/2017/04/10/Linux-%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7---autojump/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="在终端的文件夹跳转非常麻烦, 需要敲长长的路径. alias 别名也不是很方便。autojump 是通过记录进入过的目录到数据库来实现的, 所以必须是曾经进入过的目录才能跳转.">
+<meta property="og:locale">
+<meta property="og:image" content="http://omp48p40q.bkt.clouddn.com/17-4-14/72919152-file_1492142306461_3bfa.jpg">
+<meta property="article:published_time" content="2017-04-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.035Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://omp48p40q.bkt.clouddn.com/17-4-14/72919152-file_1492142306461_3bfa.jpg">
+
+
+<link rel="canonical" href="http://zouzhipeng.com/2017/04/10/Linux-%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7---autojump/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Linux 懒人工具--autojump | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          المحتويات
+        </li>
+        <li class="sidebar-nav-overview">
+          عام
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">1. 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-OS-X"><span class="nav-number">1.1.</span> <span class="nav-text">1. OS X</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Linux"><span class="nav-number">1.2.</span> <span class="nav-text">2. Linux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%94%A8%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">2. 用法</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">المقالات</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">التصنيفات</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">الوسوم</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2017/04/10/Linux-%E6%87%92%E4%BA%BA%E5%B7%A5%E5%85%B7---autojump/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 懒人工具--autojump
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">نُشر في</span>
+
+      <time title="أُنشأ: 2017-04-10 00:00:00" itemprop="dateCreated datePublished" datetime="2017-04-10T00:00:00+08:00">2017-04-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">عُدل في</span>
+        <time title="عُدل: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">في</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">在终端的文件夹跳转非常麻烦, 需要敲长长的路径. alias 别名也不是很方便。autojump 是通过记录进入过的目录到数据库来实现的, 所以必须是曾经进入过的目录才能跳转.</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="http://omp48p40q.bkt.clouddn.com/17-4-14/72919152-file_1492142306461_3bfa.jpg"></p>
+<blockquote>
+<p>在终端的文件夹跳转非常麻烦, 需要敲长长的路径.<br>alias 别名也不是很方便。<br><a target="_blank" rel="noopener" href="https://github.com/wting/autojump">autojump</a> 是通过记录进入过的目录到数据库来实现的, 所以必须是曾经进入过的目录才能跳转.</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><h3 id="1-OS-X"><a href="#1-OS-X" class="headerlink" title="1. OS X"></a>1. OS X</h3><p>推荐使用 Homebrew 安装 autojump</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install autojump</span><br></pre></td></tr></table></figure>
+
+<p>macOS 启动 Shell 自动读取的文件有</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;etc&#x2F;profile</span><br><span class="line">~&#x2F;.bash_profile</span><br><span class="line">~&#x2F;.bash_login</span><br><span class="line">~&#x2F;.profile</span><br></pre></td></tr></table></figure>
+
+<p>所以只需要在上面其中一个文件加上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[ -s $(brew --prefix)&#x2F;etc&#x2F;profile.d&#x2F;[autojump.sh](http:&#x2F;&#x2F;autojump.sh&#x2F;) ]] &amp;&amp; . $(brew --prefix)&#x2F;etc&#x2F;profile.d&#x2F;[autojump.sh](http:&#x2F;&#x2F;autojump.sh&#x2F;)</span><br></pre></td></tr></table></figure>
+
+<p>但如果终端工具使用的是 zsh，需要在<code>~/.zshrc</code>添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[ -s &#96;brew --prefix&#96;&#x2F;etc&#x2F;autojump.sh ]] &amp;&amp; . &#96;brew --prefix&#96;&#x2F;etc&#x2F;autojump.sh</span><br></pre></td></tr></table></figure>
+
+<p>然后，运行 <code>source &lt;sourcefile&gt;</code>.</p>
+<h3 id="2-Linux"><a href="#2-Linux" class="headerlink" title="2. Linux"></a>2. Linux</h3><p>首先下载 autojump 源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;github.com&#x2F;joelthelion&#x2F;autojump.git</span><br></pre></td></tr></table></figure>
+
+<p>然后可安装或卸载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd autojump</span><br><span class="line">.&#x2F;install.py or .&#x2F;uninstall.py</span><br></pre></td></tr></table></figure>
+
+<p>由于Linux 下 Shell 启动会自动读取 ~/.bashrc 文件，所以将下面一行添加到该文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[ -s ~&#x2F;.autojump&#x2F;etc&#x2F;profile.d&#x2F;autojump.sh ]] &amp;&amp; . ~&#x2F;.autojump&#x2F;etc&#x2F;profile.d&#x2F;autojump.sh</span><br></pre></td></tr></table></figure>
+
+<p>然后，运行<code>source ~/.bashrc</code>即可。</p>
+<p>安装完成后，使用查看autojump版本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ autojump --version</span><br><span class="line">autojump release-v21.1.2</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-用法"><a href="#2-用法" class="headerlink" title="2. 用法"></a>2. 用法</h2><p>只有打开过的目录 autojump 才会记录，所以使用时间越长，autojump 才会越智能。</p>
+<p>可以使用 <code>autojump</code> 命令，或者使用短命令 <code>j</code>.</p>
+<ol>
+<li><p>跳转到指定目录</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">j directoryName</span><br></pre></td></tr></table></figure>
+<p> 如果不知道目录全名，输入一部分，按Tab键就好，输错了也没关系，可以自动识别，非常强大。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># j csm</span><br><span class="line">&#x2F;data&#x2F;www&#x2F;xxx&#x2F;cms</span><br></pre></td></tr></table></figure>
+
+<p> Tab 键效果</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">vagrant@homestead:~$ pwd</span><br><span class="line">&#x2F;home&#x2F;vagrant</span><br><span class="line">vagrant@homestead:~$ j --stat</span><br><span class="line">10.0:	&#x2F;etc&#x2F;nginx&#x2F;conf.d</span><br><span class="line">20.0:	&#x2F;home&#x2F;vagrant&#x2F;www&#x2F;xxx&#x2F;doc_api</span><br><span class="line">34.6:	&#x2F;home&#x2F;vagrant&#x2F;www&#x2F;xxx</span><br><span class="line">40.0:	&#x2F;var&#x2F;log&#x2F;nginx</span><br><span class="line">Total key weight: 104. Number of stored dirs: 4</span><br><span class="line">vagrant@homestead:~$ j n__ (Tab 键自动添加了下划线)</span><br><span class="line">&#x2F;var&#x2F;log&#x2F;nginx</span><br><span class="line">vagrant@homestead:&#x2F;var&#x2F;log&#x2F;nginx$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>跳转到指定目录的子目录（Mac 下效果与<code>j</code>相同，Ubuntu下不好用）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jc directoryName</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用系统工具（Mac Finder, Windows Explorer, GNOME, etc.）打开目录，类似Mac OS terminal 下的 <code>open</code> 命令，但<code>open</code> 命令需要指定路径（Mac中还算实用，Ubuntu下不好用）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jo directoryName</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看权重 <code>j --stat</code></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ j --stat</span><br><span class="line">10.0:	&#x2F;etc&#x2F;nginx&#x2F;conf.d</span><br><span class="line">10.0:	&#x2F;home&#x2F;vagrant&#x2F;www&#x2F;caijing&#x2F;doc_api</span><br><span class="line">10.0:	&#x2F;var&#x2F;log&#x2F;nginx</span><br><span class="line">30.0:	&#x2F;home&#x2F;vagrant&#x2F;www&#x2F;caijing</span><br><span class="line">Total key weight: 59. Number of stored dirs: 4</span><br></pre></td></tr></table></figure>
+
+<p> 权重越高，说明目录使用的越频繁。</p>
+<p> 感觉 Mac 中的显示效果更好，还可以自己去调整权重值。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ j --stat</span><br><span class="line">10.0:	&#x2F;Users&#x2F;xxx&#x2F;xxx&#x2F;xxxx&#x2F;xxxx&#x2F;xxxx&#x2F;vendor</span><br><span class="line">22.4:	&#x2F;Users&#x2F;xxx&#x2F;xxx&#x2F;xxxx&#x2F;xxxx&#x2F;xxxx&#x2F;log</span><br><span class="line"></span><br><span class="line">32:	    total weight</span><br><span class="line">2:	     number of entries</span><br><span class="line">10.00:	 current directory weight</span><br><span class="line"></span><br><span class="line">data:	 &#x2F;Users&#x2F;xxx&#x2F;Library&#x2F;autojump&#x2F;autojump.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其他</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">autojump --help</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/04/06/MarkDown-%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95/" rel="prev" title="MarkDown 常用语法">
+                  <i class="fa fa-chevron-left"></i> MarkDown 常用语法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/04/11/git%20%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B0%8F%E9%97%AE%E9%A2%98/" rel="next" title="git 的几个小问题">
+                  git 的几个小问题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
