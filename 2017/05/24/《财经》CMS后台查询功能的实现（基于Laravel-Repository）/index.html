@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="使用 RequestCriteria 统一搜索功能，可自动根据 url 按字段进行搜索，无需写方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《财经》CMS后台查询功能的实现（基于Laravel Repository）">
+<meta property="og:url" content="http://zouzhipeng.com/2017/05/24/%E3%80%8A%E8%B4%A2%E7%BB%8F%E3%80%8BCMS%E5%90%8E%E5%8F%B0%E6%9F%A5%E8%AF%A2%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0%EF%BC%88%E5%9F%BA%E4%BA%8ELaravel-Repository%EF%BC%89/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="使用 RequestCriteria 统一搜索功能，可自动根据 url 按字段进行搜索，无需写方法">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-05-24T06:29:57.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.045Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="laravel">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://zouzhipeng.com/2017/05/24/%E3%80%8A%E8%B4%A2%E7%BB%8F%E3%80%8BCMS%E5%90%8E%E5%8F%B0%E6%9F%A5%E8%AF%A2%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0%EF%BC%88%E5%9F%BA%E4%BA%8ELaravel-Repository%EF%BC%89/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>《财经》CMS后台查询功能的实现（基于Laravel Repository） | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          المحتويات
+        </li>
+        <li class="sidebar-nav-overview">
+          عام
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.</span> <span class="nav-text">第一部分 单表查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%8E%E5%8F%B0%E6%90%9C%E7%B4%A2%E6%A1%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">1. 后台搜索框的基本代码：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9C%A8YourModelRepositoryEloquent-php-%E5%A6%82FlashRepositoryEloquent-php-%E4%B8%AD%E6%B7%BB%E5%8A%A0-fieldSearchable-%E5%AD%97%E6%AE%B5"><span class="nav-number">1.2.</span> <span class="nav-text">2. 在YourModelRepositoryEloquent.php (如FlashRepositoryEloquent.php) 中添加 $fieldSearchable 字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-js-%E6%96%87%E4%BB%B6%E4%B8%AD%E6%B7%BB%E5%8A%A0%E8%A7%A3%E6%9E%90url%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%82"><span class="nav-number">1.3.</span> <span class="nav-text">3. js 文件中添加解析url的方法。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%9B%9E%E6%98%BE%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%8D%E9%9C%80%E8%A6%81%E9%80%9A%E8%BF%87%E6%8E%A7%E5%88%B6%E5%99%A8%E8%8E%B7%E5%8F%96%E5%90%8E%E5%9B%9E%E4%BC%A0%EF%BC%8C%E5%9C%A8%E6%A8%A1%E6%9D%BF%E4%B8%AD%E9%80%9A%E8%BF%87-searchCondition-%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E8%8E%B7%E5%8F%96%E5%8D%B3%E5%8F%AF"><span class="nav-number">1.4.</span> <span class="nav-text">4. 回显的数据不需要通过控制器获取后回传，在模板中通过 $searchCondition 全局变量获取即可</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86-%E8%B7%A8%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.</span> <span class="nav-text">第二部分 跨表查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9C%A8-app-Models-Order-%E4%B8%AD%EF%BC%8C%E5%BB%BA%E7%AB%8B%E4%B8%8E-Payment-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB%E3%80%82"><span class="nav-number">2.1.</span> <span class="nav-text">1. 在 app&#x2F;Models&#x2F;Order 中，建立与 Payment 模型的关联关系。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Order-%E7%9A%84%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6%EF%BC%88%E5%88%97%E8%A1%A8-resources-views-backend-order-index-blade-php%EF%BC%89%E4%B8%AD%EF%BC%8C%E6%90%9C%E7%B4%A2%E7%9B%B8%E5%85%B3%E9%83%A8%E5%88%86%E7%9A%84-name-%E5%92%8C%E5%AD%97%E6%AE%B5%E5%90%8D%E9%83%BD%E8%A6%81%E5%8A%A0%E4%B8%8A%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB%E7%9A%84%E6%96%B9%E6%B3%95%E5%89%8D%E7%BC%80%E3%80%82"><span class="nav-number">2.2.</span> <span class="nav-text">2. Order 的模板文件（列表 resources&#x2F;views&#x2F;backend&#x2F;order&#x2F;index.blade.php）中，搜索相关部分的 name 和字段名都要加上关联关系的方法前缀。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%9C%A8YourModelRepositoryEloquent-php-%E5%A6%82FlashRepositoryEloquent-php-%E4%B8%AD%E6%B7%BB%E5%8A%A0-fieldSearchable-%E5%AD%97%E6%AE%B5"><span class="nav-number">2.3.</span> <span class="nav-text">3. 在YourModelRepositoryEloquent.php (如FlashRepositoryEloquent.php) 中添加 $fieldSearchable 字段</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">المقالات</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">التصنيفات</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">الوسوم</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2017/05/24/%E3%80%8A%E8%B4%A2%E7%BB%8F%E3%80%8BCMS%E5%90%8E%E5%8F%B0%E6%9F%A5%E8%AF%A2%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0%EF%BC%88%E5%9F%BA%E4%BA%8ELaravel-Repository%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《财经》CMS后台查询功能的实现（基于Laravel Repository）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">نُشر في</span>
+
+      <time title="أُنشأ: 2017-05-24 14:29:57" itemprop="dateCreated datePublished" datetime="2017-05-24T14:29:57+08:00">2017-05-24</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">عُدل في</span>
+        <time title="عُدل: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">في</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/laravel/" itemprop="url" rel="index"><span itemprop="name">laravel</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>使用 <a target="_blank" rel="noopener" href="https://github.com/andersao/l5-repository">RequestCriteria</a> 统一搜索功能，可自动根据 url 按字段进行搜索，无需写方法</p>
+<a id="more"></a>
+
+<h1 id="第一部分-单表查询"><a href="#第一部分-单表查询" class="headerlink" title="第一部分 单表查询"></a>第一部分 单表查询</h1><h2 id="1-后台搜索框的基本代码："><a href="#1-后台搜索框的基本代码：" class="headerlink" title="1. 后台搜索框的基本代码："></a>1. 后台搜索框的基本代码：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;panel-group&quot;&gt;</span><br><span class="line">    &lt;div class&#x3D;&quot;panel panel-default&quot; style&#x3D;&quot;border: none;&quot;&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;panel-heading&quot;&gt;</span><br><span class="line">            &lt;h4 class&#x3D;&quot;panel-title&quot;&gt;</span><br><span class="line">                &lt;a data-toggle&#x3D;&quot;collapse&quot; href&#x3D;&quot;#wrapper_search&quot;</span><br><span class="line">                   aria-expanded&#x3D;&quot;false&quot; @if(false &#x3D;&#x3D; $searchMode)class&#x3D;&quot;collapsed&quot; @endif &gt;</span><br><span class="line">                    搜索相关</span><br><span class="line">                &lt;&#x2F;a&gt;</span><br><span class="line">            &lt;&#x2F;h4&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;div id&#x3D;&quot;wrapper_search&quot; class&#x3D;&quot;panel-collapse collapse @if(true &#x3D;&#x3D; $searchMode)in @endif&quot;</span><br><span class="line">             aria-expanded&#x3D;&quot;false&quot;&gt;</span><br><span class="line">            &lt;div class&#x3D;&quot;panel-body&quot;&gt;</span><br><span class="line">                &lt;div class&#x3D;&quot;portlet-heading&quot;&gt;</span><br><span class="line">                    &lt;form id&#x3D;&quot;frm_search_info&quot; class&#x3D;&quot;text-dark form-horizontal&quot; action&#x3D;&quot;&quot;&gt;</span><br><span class="line">                        &lt;input type&#x3D;&quot;hidden&quot; value&#x3D;&quot;&quot;&#x2F;&gt;</span><br><span class="line">                        &lt;div class&#x3D;&quot;form-group col-sm-4 pull-left&quot;&gt;</span><br><span class="line">                            &lt;label for&#x3D;&quot;order_sn&quot; class&#x3D;&quot;control-label col-sm-4&quot;&gt;订单号&lt;&#x2F;label&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;div class&#x3D;&quot;col-sm-8&quot;&gt;</span><br><span class="line">                                &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control&quot; id&#x3D;&quot;title&quot; name&#x3D;&quot;id&quot;</span><br><span class="line">                                       value&#x3D;&quot;&#123;&#123;isset($searchCondition[&#39;id&#39;])?$searchCondition[&#39;id&#39;]:&#39;&#39;&#125;&#125;&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;&#x2F;div&gt;</span><br><span class="line">                        &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;div class&#x3D;&quot;form-group col-sm-4 pull-left&quot;&gt;</span><br><span class="line">                            &lt;label for&#x3D;&quot;snap_goods_name&quot; class&#x3D;&quot;control-label col-sm-4&quot;&gt;商品名称&lt;&#x2F;label&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;div class&#x3D;&quot;col-sm-8&quot;&gt;</span><br><span class="line">                                &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control&quot; id&#x3D;&quot;title&quot; name&#x3D;&quot;snap_goods_name&quot;</span><br><span class="line">                                       value&#x3D;&quot;&#123;&#123;isset($searchCondition[&#39;snap_goods_name&#39;])?$searchCondition[&#39;snap_goods_name&#39;]:&#39;&#39;&#125;&#125;&quot;&#x2F;&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;&#x2F;div&gt;</span><br><span class="line">                        &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;div class&#x3D;&quot;form-group col-sm-4 pull-left&quot;&gt;</span><br><span class="line">                            &lt;label for&#x3D;&quot;paymentInfo.payment_type&quot; class&#x3D;&quot;control-label col-sm-4&quot;&gt;支付方式&lt;&#x2F;label&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;div class&#x3D;&quot;col-sm-8&quot;&gt;</span><br><span class="line">                                &lt;select class&#x3D;&quot;form-control input-lg select2&quot; id&#x3D;&quot;paymentInfo.payment_type&quot; name&#x3D;&quot;paymentInfo.payment_type&quot;</span><br><span class="line">                                        style&#x3D;&quot;width: 192px;&quot;&gt;</span><br><span class="line">                                    &lt;option value&#x3D;&quot;&quot;&gt;全部&lt;&#x2F;option&gt;</span><br><span class="line">                                    @if(isset($paymentType))</span><br><span class="line">                                        @foreach($paymentType as $index &#x3D;&gt; $item)</span><br><span class="line">                                            &lt;option value&#x3D;&quot;&#123;&#123;$index&#125;&#125;&quot;</span><br><span class="line">                                                    @if(isset($searchCondition[&#39;paymentInfo.payment_type&#39;]) &amp;&amp; $index &#x3D;&#x3D; $searchCondition[&#39;paymentInfo.payment_type&#39;]) selected&#x3D;&quot;selected&quot; @endif&gt;&#123;&#123;$item&#125;&#125;&lt;&#x2F;option&gt;</span><br><span class="line">                                        @endforeach</span><br><span class="line">                                    @endif</span><br><span class="line">                                &lt;&#x2F;select&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;&#x2F;div&gt;</span><br><span class="line">                        &lt;&#x2F;div&gt;</span><br><span class="line">                        &lt;div class&#x3D;&quot;form-group col-sm-4 pull-left&quot;&gt;</span><br><span class="line">                            &lt;label for&#x3D;&quot;created_at@&quot; class&#x3D;&quot;control-label col-sm-4&quot;&gt;至&lt;&#x2F;label&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;div class&#x3D;&quot;col-sm-8&quot;&gt;</span><br><span class="line">                                &lt;div class&#x3D;&quot;input-group datetimepicker date&quot; id&#x3D;&quot;end_time_picker&quot;&gt;</span><br><span class="line">                                    &lt;input class&#x3D;&quot;form-control&quot; id&#x3D;&quot;created_at@&quot;</span><br><span class="line">                                           name&#x3D;&quot;created_at@&quot; type&#x3D;&quot;text&quot;</span><br><span class="line">                                           value&#x3D;&quot;@if(isset($searchCondition[&#39;created_at@&#39;]) &amp;&amp; $searchCondition[&#39;created_at@&#39;])&#123;&#123;$searchCondition[&#39;created_at@&#39;]&#125;&#125;@endif&quot;&gt;</span><br><span class="line">                                    &lt;span class&#x3D;&quot;input-group-addon&quot; for&#x3D;&quot;created_at@&quot;&gt;</span><br><span class="line">                            &lt;span class&#x3D;&quot;glyphicon glyphicon-calendar&quot;&gt;&lt;&#x2F;span&gt;</span><br><span class="line">                        &lt;&#x2F;span&gt;</span><br><span class="line">                                &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;&#x2F;div&gt;</span><br><span class="line">                        &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;div class&#x3D;&quot;form-group col-sm-4 pull-right&quot;&gt;</span><br><span class="line">                            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-default m-l-10&quot; id&#x3D;&quot;btn_clear&quot;&gt;清空&lt;&#x2F;button&gt;</span><br><span class="line">                            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-purple m-l-10&quot; id&#x3D;&quot;btn_export&quot;&gt;</span><br><span class="line">                                Excel 导出</span><br><span class="line">                            &lt;&#x2F;button&gt;</span><br><span class="line">                            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-primary m-l-10&quot; id&#x3D;&quot;btn_search&quot;&gt;搜索&lt;&#x2F;button&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;div class&#x3D;&quot;clearfix&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">                    &lt;&#x2F;form&gt;</span><br><span class="line">                &lt;&#x2F;div&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+<p>要求表单中的 name 与数据表中的字段名完全一致。<br>注意：这里是 button，而不是 submit</p>
+<h2 id="2-在YourModelRepositoryEloquent-php-如FlashRepositoryEloquent-php-中添加-fieldSearchable-字段"><a href="#2-在YourModelRepositoryEloquent-php-如FlashRepositoryEloquent-php-中添加-fieldSearchable-字段" class="headerlink" title="2. 在YourModelRepositoryEloquent.php (如FlashRepositoryEloquent.php) 中添加 $fieldSearchable 字段"></a>2. 在YourModelRepositoryEloquent.php (如FlashRepositoryEloquent.php) 中添加 $fieldSearchable 字段</h2><p>如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">protected $fieldSearchable &#x3D; [</span><br><span class="line">    &#39;id&#39;,</span><br><span class="line">    &#39;snap_goods_name&#39; &#x3D;&gt; &#39;like&#39;,</span><br><span class="line">    &#39;username&#39;,</span><br><span class="line">    &#39;order_status&#39;,</span><br><span class="line">    &#39;created_at&#39; &#x3D;&gt; &quot;&gt;&#x3D;&quot;,</span><br><span class="line">    &#39;created_at@&#39; &#x3D;&gt; &quot;&lt;&#x3D;&quot;,</span><br><span class="line">    &#39;source_id&#39;,</span><br><span class="line">    &#39;paymentInfo.payment_type&#39;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li>要列出所有需要进行搜索的字段。</li>
+<li>等于的可以省略，</li>
+<li>模糊搜索用 like，</li>
+<li>范围搜索也直接写。</li>
+<li>如果一个字段需要用一次以上，需要对 key 进行重写，加一个@</li>
+</ul>
+<p>其中，最后一个功能是在 BaseRepositoryEloquent 中定义的。</p>
+<p>默认的键值间的分隔符为：， 如<a target="_blank" rel="noopener" href="http://prettus.local/users?search=name:John">http://prettus.local/users?search=name:John</a> Doe;email:<a href="mailto:&#106;&#x6f;&#104;&#110;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#106;&#x6f;&#104;&#110;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a><br>可以进行自定义。<br>在 BaseRepositoryEloquent.php 的构造方法中，<br><code>$this-&gt;keyValueSeparator = &#39;|:&#39;</code>。</p>
+<p>组件中默认不包含范围选择符，即sql中的between用法。我们进行了改写，以支持该用法。</p>
+<p>BaseRepositoryEloquent 中，添加解析搜索url的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public function parserSearchData($searchData)</span><br><span class="line">&#123;</span><br><span class="line">    if (!empty($searchData) &amp;&amp; is_array($searchData)) &#123;</span><br><span class="line">        foreach ($searchData as $index &#x3D;&gt; $item) &#123;</span><br><span class="line">            $method &#x3D; sprintf(&quot;parser%s4Search&quot;, ucfirst(camel_case(str_replace(&#39;@&#39;, &#39;&#39;, $index))));</span><br><span class="line">            $model &#x3D; $this-&gt;getModel();</span><br><span class="line">            if (method_exists($model, $method)) &#123;</span><br><span class="line">                $searchData[$index] &#x3D; $model-&gt;&#123;$method&#125;($item);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return $searchData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以及解析原始搜索数据的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public function parserOriginSearchData($search)</span><br><span class="line">&#123;</span><br><span class="line">    $searchData &#x3D; [];</span><br><span class="line">    if (stripos($search, $this-&gt;keyValueSeparator)) &#123;</span><br><span class="line">        $fields &#x3D; explode($this-&gt;paramSeparator, $search);</span><br><span class="line"></span><br><span class="line">        foreach ($fields as $row) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                list($field, $value) &#x3D; explode($this-&gt;keyValueSeparator, $row);</span><br><span class="line">                $searchData[trim($field)] &#x3D; trim($value);</span><br><span class="line">            &#125; catch (\Exception $e) &#123;</span><br><span class="line">                &#x2F;&#x2F;Surround offset error</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return $searchData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>业务需要，添加了整合后的获取搜索参数的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public function getSearchData($param &#x3D; null, $is_origin &#x3D; true)</span><br><span class="line">&#123;</span><br><span class="line">    $search &#x3D; $this-&gt;request-&gt;get(config(&#39;repository.criteria.params.search&#39;, &#39;search&#39;), null);</span><br><span class="line">    $searchData &#x3D; $this-&gt;parserOriginSearchData($search);</span><br><span class="line">    if (false &#x3D;&#x3D; $is_origin) &#123;</span><br><span class="line">        $searchData &#x3D; $this-&gt;parserSearchData($searchData);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!empty($param)) &#123;</span><br><span class="line">        if (isset($searchData[$param])) &#123;</span><br><span class="line">            $searchData &#x3D; $searchData[$param];</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $searchData &#x3D; null;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return $searchData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-js-文件中添加解析url的方法。"><a href="#3-js-文件中添加解析url的方法。" class="headerlink" title="3. js 文件中添加解析url的方法。"></a>3. js 文件中添加解析url的方法。</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 搜索 按钮</span><br><span class="line">searchWithParams(&#39;&#x2F;magazine&#x2F;order?page&#x3D;1&#39;);</span><br><span class="line"></span><br><span class="line">function searchWithParams(url) &#123;</span><br><span class="line">    $(&quot;#btn_search&quot;).click(function () &#123;</span><br><span class="line">        var params &#x3D; &#123;&#125;;</span><br><span class="line">        $(&quot;#frm_search_info select, #frm_search_info input[type&#x3D;text], #frm_search_info input[type&#x3D;hidden]&quot;).each(function () &#123;</span><br><span class="line">            var value &#x3D; $(this).val();</span><br><span class="line">            if (&#39;&#39; !&#x3D; value) &#123;</span><br><span class="line">                params[$(this).attr(&#39;name&#39;)] &#x3D; value;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        if (!$.isEmptyObject(params)) &#123;</span><br><span class="line">            url +&#x3D; &quot;&amp;search&#x3D;&quot; + parserParams2Url(params);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location.href &#x3D; url;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该方法实现了对所有输入框、下拉框等搜索框内容的收集并处理，生成一个 Repository 可解析的 url。</p>
+<h2 id="4-回显的数据不需要通过控制器获取后回传，在模板中通过-searchCondition-全局变量获取即可"><a href="#4-回显的数据不需要通过控制器获取后回传，在模板中通过-searchCondition-全局变量获取即可" class="headerlink" title="4. 回显的数据不需要通过控制器获取后回传，在模板中通过 $searchCondition 全局变量获取即可"></a>4. 回显的数据不需要通过控制器获取后回传，在模板中通过 $searchCondition 全局变量获取即可</h2><p>如何使用？<br>控制器中的方法会非常简洁：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public function getIndex(Request $request)</span><br><span class="line">&#123;</span><br><span class="line">    $flashes &#x3D; $this-&gt;repositoryInterface-&gt;paginate();</span><br><span class="line"></span><br><span class="line">    return View::make(&quot;flash&#x2F;index&quot;, array(</span><br><span class="line">        &quot;flashes&quot; &#x3D;&gt; $flashes,</span><br><span class="line">        &quot;flashTypes&quot; &#x3D;&gt; Flash::$flashTypes,</span><br><span class="line">    ));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="第二部分-跨表查询"><a href="#第二部分-跨表查询" class="headerlink" title="第二部分 跨表查询"></a>第二部分 跨表查询</h1><p>上述搜索方法只是实现了单表搜索，如果搜索涉及到跨表该怎么处理？</p>
+<p>场景：在模型Order的列表页进行搜索，但搜索的关键字是模型Payment的一个字段，模型Payment有一个指向模型Order的外键 order_id。</p>
+<p>实现：</p>
+<h2 id="1-在-app-Models-Order-中，建立与-Payment-模型的关联关系。"><a href="#1-在-app-Models-Order-中，建立与-Payment-模型的关联关系。" class="headerlink" title="1. 在 app/Models/Order 中，建立与 Payment 模型的关联关系。"></a>1. 在 app/Models/Order 中，建立与 Payment 模型的关联关系。</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 支付信息关联关系</span><br><span class="line"> * @return \Illuminate\Database\Eloquent\Relations\HasOne</span><br><span class="line"> *&#x2F;</span><br><span class="line">public function paymentInfo()</span><br><span class="line">&#123;</span><br><span class="line">    return $this-&gt;hasOne(&#39;App\Models\Payment&#39;, &#39;order_id&#39;, &#39;id&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Order-的模板文件（列表-resources-views-backend-order-index-blade-php）中，搜索相关部分的-name-和字段名都要加上关联关系的方法前缀。"><a href="#2-Order-的模板文件（列表-resources-views-backend-order-index-blade-php）中，搜索相关部分的-name-和字段名都要加上关联关系的方法前缀。" class="headerlink" title="2. Order 的模板文件（列表 resources/views/backend/order/index.blade.php）中，搜索相关部分的 name 和字段名都要加上关联关系的方法前缀。"></a>2. Order 的模板文件（列表 resources/views/backend/order/index.blade.php）中，搜索相关部分的 name 和字段名都要加上关联关系的方法前缀。</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;form-group col-sm-4 pull-left&quot;&gt;</span><br><span class="line">    &lt;label for&#x3D;&quot;paymentInfo.payment_type&quot; class&#x3D;&quot;control-label col-sm-4&quot;&gt;支付方式&lt;&#x2F;label&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class&#x3D;&quot;col-sm-8&quot;&gt;</span><br><span class="line">        &lt;select class&#x3D;&quot;form-control input-lg select2&quot; id&#x3D;&quot;paymentInfo.payment_type&quot; name&#x3D;&quot;paymentInfo.payment_type&quot;</span><br><span class="line">                style&#x3D;&quot;width: 192px;&quot;&gt;</span><br><span class="line">            &lt;option value&#x3D;&quot;&quot;&gt;全部&lt;&#x2F;option&gt;</span><br><span class="line">            @if(isset($paymentType))</span><br><span class="line">                @foreach($paymentType as $index &#x3D;&gt; $item)</span><br><span class="line">                    &lt;option value&#x3D;&quot;&#123;&#123;$index&#125;&#125;&quot;</span><br><span class="line">                            @if(isset($searchCondition[&#39;paymentInfo.payment_type&#39;]) &amp;&amp; $index &#x3D;&#x3D; $searchCondition[&#39;paymentInfo.payment_type&#39;]) selected&#x3D;&quot;selected&quot; @endif&gt;&#123;&#123;$item&#125;&#125;&lt;&#x2F;option&gt;</span><br><span class="line">                @endforeach</span><br><span class="line">            @endif</span><br><span class="line">        &lt;&#x2F;select&gt;</span><br><span class="line"></span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-在YourModelRepositoryEloquent-php-如FlashRepositoryEloquent-php-中添加-fieldSearchable-字段"><a href="#3-在YourModelRepositoryEloquent-php-如FlashRepositoryEloquent-php-中添加-fieldSearchable-字段" class="headerlink" title="3. 在YourModelRepositoryEloquent.php (如FlashRepositoryEloquent.php) 中添加 $fieldSearchable 字段"></a>3. 在YourModelRepositoryEloquent.php (如FlashRepositoryEloquent.php) 中添加 $fieldSearchable 字段</h2><p>如：</p>
+<pre><code>protected $fieldSearchable = [
+    &#39;paymentInfo.payment_type&#39;
+];
+
+要与模板文件的name一致。
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/laravel/" rel="tag"># laravel</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/05/23/%E6%99%9A%E9%9C%9E%E6%97%A0%E9%99%90%E5%A5%BD%EF%BC%8C%E5%8F%AA%E6%98%AF%E4%B8%8B%E7%8F%AD%E6%99%9A/" rel="prev" title="晚霞无限好，只是下班晚">
+                  <i class="fa fa-chevron-left"></i> 晚霞无限好，只是下班晚
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/05/24/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0/" rel="next" title="【记录】正则表达式学习">
+                  【记录】正则表达式学习 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

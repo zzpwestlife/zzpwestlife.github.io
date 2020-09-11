@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="1. Docker 相关进入docker容器 123docker exec -it CONTAINER_ID&#x2F;name bashdocker exec -it nginx bashdocker-compose exec nginx bash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【记录】最近的一些琐碎 trivia 201710">
+<meta property="og:url" content="http://zouzhipeng.com/2017/10/08/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91%E6%9C%80%E8%BF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="1. Docker 相关进入docker容器 123docker exec -it CONTAINER_ID&#x2F;name bashdocker exec -it nginx bashdocker-compose exec nginx bash">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-10-08T08:01:20.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.047Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="trivia">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://zouzhipeng.com/2017/10/08/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91%E6%9C%80%E8%BF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【记录】最近的一些琐碎 trivia 201710 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          المحتويات
+        </li>
+        <li class="sidebar-nav-overview">
+          عام
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Docker-%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text">1. Docker 相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Linux"><span class="nav-number">2.</span> <span class="nav-text">2. Linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">3. 正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-nginx"><span class="nav-number">4.</span> <span class="nav-text">4. nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Laravel"><span class="nav-number">5.</span> <span class="nav-text">5. Laravel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-lrzsz"><span class="nav-number">6.</span> <span class="nav-text">6. lrzsz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-localhost%E4%B8%8E127-0-0-1%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">7.</span> <span class="nav-text">7. localhost与127.0.0.1的区别是什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Mac"><span class="nav-number">8.</span> <span class="nav-text">8. Mac</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">المقالات</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">التصنيفات</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">الوسوم</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2017/10/08/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91%E6%9C%80%E8%BF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【记录】最近的一些琐碎 trivia 201710
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">نُشر في</span>
+
+      <time title="أُنشأ: 2017-10-08 16:01:20" itemprop="dateCreated datePublished" datetime="2017-10-08T16:01:20+08:00">2017-10-08</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">عُدل في</span>
+        <time title="عُدل: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">في</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="1-Docker-相关"><a href="#1-Docker-相关" class="headerlink" title="1. Docker 相关"></a>1. Docker 相关</h2><p>进入docker容器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it CONTAINER_ID&#x2F;name bash</span><br><span class="line">docker exec -it nginx bash</span><br><span class="line">docker-compose exec nginx bash</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>用到的几个别名，添加到 .zshrc 或 .bashrc 等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias ll&#x3D;&#39;ls -lG&#39;</span><br><span class="line">alias dco&#x3D;&#39;docker-compose&#39;</span><br><span class="line">alias dce&#x3D;&#39;docker-compose exec&#39;</span><br></pre></td></tr></table></figure>
+
+<p>docker 启动 需先进入 laravel_docker 目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">j lar</span><br><span class="line">dco up -d mysql redis nginx</span><br></pre></td></tr></table></figure>
+
+<p>看队列执行情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tail -f &#x2F;var&#x2F;log&#x2F;supervisor&#x2F;worker_message.log</span><br><span class="line">tail -f &#x2F;data&#x2F;www&#x2F;caijing&#x2F;cms&#x2F;storage&#x2F;logs&#x2F;admai&#x2F;20170809.log</span><br><span class="line">tail -f &#x2F;data&#x2F;www&#x2F;caijing&#x2F;cms&#x2F;storage&#x2F;logs&#x2F;ad_sogou&#x2F;20170809.log</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Linux"><a href="#2-Linux" class="headerlink" title="2. Linux"></a>2. Linux</h2><p>1.CPU占用最多的前10个进程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps auxw|head -1;ps auxw|sort -rn -k3|head -10</span><br></pre></td></tr></table></figure>
+
+<p>2.内存消耗最多的前10个进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps auxw|head -1;ps auxw|sort -rn -k4|head -10</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>Linux 搜索某个文件夹内的所有文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find .&#x2F; -name &quot;*&quot; | xargs grep &quot;495043143&quot;</span><br></pre></td></tr></table></figure>
+
+<p>vim 查找统计次数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:%s&#x2F;失败&#x2F;&amp;&#x2F;gn</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-正则表达式"><a href="#3-正则表达式" class="headerlink" title="3. 正则表达式"></a>3. 正则表达式</h2><p>匹配中文字符的正则表达式: <code>[\u4e00-\u9fa5]</code><br>匹配双字节字符(包含汉字):  <code>[^\x00-\xff]</code><br>匹配任何空白字符，包括空格、制表符、换页符等等:  <code>\s</code>。</p>
+<h2 id="4-nginx"><a href="#4-nginx" class="headerlink" title="4. nginx"></a>4. nginx</h2><p>最简单的 nginx 配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       443;</span><br><span class="line">    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    ssl                  on;</span><br><span class="line">    ssl_certificate      server.crt;</span><br><span class="line">    ssl_certificate_key  server.key;</span><br><span class="line"></span><br><span class="line">    ssl_session_timeout  5m;</span><br><span class="line"></span><br><span class="line">    ssl_protocols  SSLv2 SSLv3 TLSv1;</span><br><span class="line">    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br><span class="line">    ssl_prefer_server_ciphers   on;</span><br><span class="line"></span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        root   html;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-Laravel"><a href="#5-Laravel" class="headerlink" title="5. Laravel"></a>5. Laravel</h2><ol>
+<li>tinker 生成测试数据</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php artisan tinker</span><br><span class="line">factory(App\User::class, 500)-&gt;create();</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>编辑完composer.json文件，执行</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer dump-autoload -o</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="6-lrzsz"><a href="#6-lrzsz" class="headerlink" title="6. lrzsz"></a>6. lrzsz</h2><ol>
+<li>安装</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># yum install lrzsz	</span><br><span class="line">或者 apt-get install lrzsz</span><br></pre></td></tr></table></figure>
+
+<p>使用SecureCRT来上传和下载文件了。<br>打开SecureCRT软件 -&gt; Options -&gt; session options -&gt; X/Y/Zmodem 下可以设置上传和下载的目录;<br>然后在用SecureCRT登陆linux终端的时候:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># sz filename (发送文件到客户端,zmodem接收可以自行启动)</span><br><span class="line"># rz (从客户端上传文件到linux服务端)</span><br></pre></td></tr></table></figure>
+
+<p>rz命令也可以在SecureCRT中使用UI来上传。</p>
+<h2 id="7-localhost与127-0-0-1的区别是什么"><a href="#7-localhost与127-0-0-1的区别是什么" class="headerlink" title="7. localhost与127.0.0.1的区别是什么?"></a>7. localhost与127.0.0.1的区别是什么?</h2><p>相信有人会说是本地ip，曾有人说，用127.0.0.1比localhost好，可以减少一次解析。<br>看来这个问题还有人不清楚，其实这两者是有区别的。<br>localhost也叫local ，正确的解释是：本地服务器<br>127.0.0.1在windows等系统的正确解释是：本机地址（本机服务器）<br>他们的解析通过本机的host文件，windows自动将localhost解析为127.0.0.1<br> <br>localhot（local）是不经网卡传输！这点很重要，它不受网络防火墙和网卡相关的的限制。<br>127.0.0.1是通过网卡传输，依赖网卡，并受到网络防火墙和网卡相关的限制。<br>一般设置程序时本地服务用localhost是最好的，localhost不会解析成ip，也不会占用网卡、网络资源。<br>有时候用localhost可以，但用127.0.0.1就不可以的情况就是在于此。猜想localhost访问时，系统带的本机当前用户的权限去访问，而用ip的时候，等于本机是通过网络再去访问本机，可能涉及到网络用户的权限。<br>￼<br>这里一张图</p>
+<h2 id="8-Mac"><a href="#8-Mac" class="headerlink" title="8. Mac"></a>8. Mac</h2><p>装机</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">brew cask install alfred</span><br><span class="line">brew cask install the-unarchiver</span><br><span class="line">brew cask install qq</span><br><span class="line">brew cask install line</span><br><span class="line">brew cask install skype</span><br><span class="line">brew cask install thunder</span><br><span class="line">brew cask install mplayerx</span><br><span class="line">brew cask install evernote</span><br><span class="line">brew cask install skitch</span><br><span class="line">brew cask install dropbox</span><br><span class="line">brew cask install google-chrome</span><br><span class="line">brew cask install mou</span><br><span class="line">brew cask install iterm2</span><br><span class="line">brew cask install sublime-text</span><br><span class="line">brew cask install virtualbox</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>mac下显示隐藏文件夹</li>
+</ol>
+<p>显示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaults write com.apple.finder AppleShowAllFiles -bool true</span><br></pre></td></tr></table></figure>
+<p>隐藏：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">defaults write com.apple.finder AppleShowAllFiles -bool false</span><br></pre></td></tr></table></figure>
+<p>重启生效</p>
+<ol start="3">
+<li>瘦身 mac 的 office</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bash -c &quot;curl -s https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;goodbest&#x2F;OfficeThinner&#x2F;master&#x2F;OfficeThinner.sh | bash&quot;</span><br></pre></td></tr></table></figure>
+
+<p>根据要求输入密码，回车，等待处理，一般需要1分钟左右。</p>
+<p>然后检查是否瘦身成功，在应用程序里可以看到Office组件大小</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/trivia/" rel="tag"># trivia</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/07/15/Laravel-%E5%8E%BB%E9%87%8D%E3%80%81%E5%88%86%E7%BB%84%E5%8F%96%E6%9C%80%E5%A4%A7%E3%80%81%E6%8C%89%E6%97%B6%E9%97%B4%E4%BA%8C%E6%AC%A1%E5%88%86%E7%BB%84%E3%80%81%E8%AF%84%E8%AE%BA%E7%9B%96%E6%A5%BC%E7%AD%89/" rel="prev" title="Laravel 去重、分组取最大、按时间二次分组、评论盖楼等">
+                  <i class="fa fa-chevron-left"></i> Laravel 去重、分组取最大、按时间二次分组、评论盖楼等
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/11/13/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8BLinux-%E7%8E%A9%E8%BD%AC%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-part-1/" rel="next" title="快速上手Linux 玩转典型应用 part-1">
+                  快速上手Linux 玩转典型应用 part-1 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

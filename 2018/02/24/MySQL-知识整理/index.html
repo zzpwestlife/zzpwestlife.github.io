@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="mysql 关联更新update 后面跟的表名是即将要使用到的表 12update A,B set A.c1&#x3D;b.c1, A.c2&#x3D;b.c2 where A.id&#x3D;B.id;update A inner join B on A.id&#x3D;b.id set A.c1&#x3D;B.c1, A.c2&#x3D;B.c2 where ...;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 知识整理">
+<meta property="og:url" content="http://zouzhipeng.com/2018/02/24/MySQL-%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="mysql 关联更新update 后面跟的表名是即将要使用到的表 12update A,B set A.c1&#x3D;b.c1, A.c2&#x3D;b.c2 where A.id&#x3D;B.id;update A inner join B on A.id&#x3D;b.id set A.c1&#x3D;B.c1, A.c2&#x3D;B.c2 where ...;">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-02-24T06:26:02.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.038Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://zouzhipeng.com/2018/02/24/MySQL-%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>MySQL 知识整理 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          المحتويات
+        </li>
+        <li class="sidebar-nav-overview">
+          عام
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-%E5%85%B3%E8%81%94%E6%9B%B4%E6%96%B0"><span class="nav-number">1.</span> <span class="nav-text">mysql 关联更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E7%A7%8D%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.</span> <span class="nav-text">6 种关联查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">MySQL 查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%9F%A5%E6%89%BE%E5%88%86%E4%BA%AB%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">3.1.</span> <span class="nav-text">1. 查找分享查询速度慢的原因</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97"><span class="nav-number">3.1.1.</span> <span class="nav-text">记录慢查询日志</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-show-profile"><span class="nav-number">3.1.2.</span> <span class="nav-text">使用 show profile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-show-status"><span class="nav-number">3.1.3.</span> <span class="nav-text">使用 show status</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-show-processlist"><span class="nav-number">3.1.4.</span> <span class="nav-text">使用 show processlist</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-explain"><span class="nav-number">3.1.5.</span> <span class="nav-text">使用 explain</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE"><span class="nav-number">3.2.</span> <span class="nav-text">2. 优化查询过程中的数据访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%BC%98%E5%8C%96%E9%95%BF%E9%9A%BE%E7%9A%84%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.3.</span> <span class="nav-text">3. 优化长难的查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%87%E5%88%86%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.3.1.</span> <span class="nav-text">切分查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E8%A7%A3%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.3.2.</span> <span class="nav-text">分解关联查询</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%BC%98%E5%8C%96%E7%89%B9%E5%AE%9A%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.4.</span> <span class="nav-text">4. 优化特定类型的查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%98%E5%8C%96-count"><span class="nav-number">3.4.1.</span> <span class="nav-text">优化 count(*)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.4.2.</span> <span class="nav-text">优化关联查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.4.3.</span> <span class="nav-text">优化子查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%98%E5%8C%96-group-by-%E5%92%8C-distinct"><span class="nav-number">3.4.4.</span> <span class="nav-text">优化 group by 和 distinct</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%98%E5%8C%96-limit-%E5%88%86%E9%A1%B5"><span class="nav-number">3.4.5.</span> <span class="nav-text">优化 limit 分页</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%98%E5%8C%96-union-%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.4.6.</span> <span class="nav-text">优化 union 查询</span></a></li></ol></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">المقالات</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">التصنيفات</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">الوسوم</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2018/02/24/MySQL-%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL 知识整理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">نُشر في</span>
+
+      <time title="أُنشأ: 2018-02-24 14:26:02" itemprop="dateCreated datePublished" datetime="2018-02-24T14:26:02+08:00">2018-02-24</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">عُدل في</span>
+        <time title="عُدل: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="mysql-关联更新"><a href="#mysql-关联更新" class="headerlink" title="mysql 关联更新"></a>mysql 关联更新</h3><p>update 后面跟的表名是即将要使用到的表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> A,B <span class="keyword">set</span> A.c1=b.c1, A.c2=b.c2 <span class="keyword">where</span> A.id=B.id;</span><br><span class="line"><span class="keyword">update</span> A <span class="keyword">inner</span> <span class="keyword">join</span> B <span class="keyword">on</span> A.id=b.id <span class="keyword">set</span> A.c1=B.c1, A.c2=B.c2 <span class="keyword">where</span> ...;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<h3 id="6-种关联查询"><a href="#6-种关联查询" class="headerlink" title="6 种关联查询"></a>6 种关联查询</h3><ul>
+<li>交叉连接 cross join: 笛卡尔积<ul>
+<li><code>select * from A, B, (,C)</code></li>
+<li><code>select * from A cross join B (cross join C)</code></li>
+<li>没有任何关联条件，结果是笛卡尔积，结果集会很大，没有意义，很少使用</li>
+</ul>
+</li>
+<li>内连接 inner join<ul>
+<li><code>select * from A,B where A.id=B.id</code></li>
+<li><code>select * from A (inner) join B on A.id=B.id</code></li>
+<li>多表中同时符合某种条件的数据记录的集合</li>
+<li>等值连接（<code>on A.id=B.id</code>）、不等值连接（<code>on A.id&gt;B.id</code>）、自连接（<code>select * from A t1 inner join A t2 on t1.id=t2.pid</code>）</li>
+<li>可以缩写为 join</li>
+</ul>
+</li>
+<li>外连接 left join/right join<ul>
+<li>左外连接： left outer join，以左表为主，先查询出左表，按照 on 后的关联条件匹配右表，没有匹配到的用 null 填充，可以简写为 left join</li>
+<li>右外连接 right outer join</li>
+</ul>
+</li>
+<li>联合查询 union, union all<ul>
+<li><code>select * from A union select * from B union ...</code></li>
+<li>多条 select 语句的结果集进行累加，union 前的结果为基准</li>
+<li>列数要相等，相同的记录行会合并</li>
+<li>如果使用 union all，则不会合并重复的记录行</li>
+<li>union 效率高于 union all</li>
+</ul>
+</li>
+<li>全连接 full join<ul>
+<li>只是一个概念，mysql 不支持</li>
+<li>可以使用 left join，union，right join 联合实现，<code>select * from A left join B on A.id=B.id union select * from A right join B on A.id=B.id</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL-查询优化"><a href="#MySQL-查询优化" class="headerlink" title="MySQL 查询优化"></a>MySQL 查询优化</h3><h4 id="1-查找分享查询速度慢的原因"><a href="#1-查找分享查询速度慢的原因" class="headerlink" title="1. 查找分享查询速度慢的原因"></a>1. 查找分享查询速度慢的原因</h4><h5 id="记录慢查询日志"><a href="#记录慢查询日志" class="headerlink" title="记录慢查询日志"></a>记录慢查询日志</h5><p>分析查询日志，不建议直接打开慢查询日志进行分析，可以使用 pt-query-digest 工具进行分析</p>
+<h5 id="使用-show-profile"><a href="#使用-show-profile" class="headerlink" title="使用 show profile"></a>使用 show profile</h5><p><code>set profiling=1;</code> 开启，服务器上执行的所有语句都会监测消耗的时间，存到临时表中</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">profiles</span>;</span><br><span class="line"><span class="keyword">show</span> profile <span class="keyword">for</span> <span class="keyword">query</span> 临时表中单条记录<span class="keyword">ID</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用-show-status"><a href="#使用-show-status" class="headerlink" title="使用 show status"></a>使用 show status</h5><p><code>show status</code> 会返回一些计数器，<code>show global status</code> 查看服务器级别的所有计数</p>
+<p>有时根据这些计数，可以猜测出哪些操作代价较高或者消耗时间多</p>
+<h5 id="使用-show-processlist"><a href="#使用-show-processlist" class="headerlink" title="使用 show processlist"></a>使用 show processlist</h5><p>观察是否有大量进程处于不正常的状态或者特征</p>
+<h5 id="使用-explain"><a href="#使用-explain" class="headerlink" title="使用 explain"></a>使用 explain</h5><p>分析单条 SQL 语句<br><code>explain select * from A;</code></p>
+<h4 id="2-优化查询过程中的数据访问"><a href="#2-优化查询过程中的数据访问" class="headerlink" title="2. 优化查询过程中的数据访问"></a>2. 优化查询过程中的数据访问</h4><ul>
+<li>访问数据太多导致查询性能下降</li>
+<li>确定应用程序是否在检索大量超过需要的数据，可能是太多行或列</li>
+<li>确认 mysql 服务器是否在分析大量不必要的数据行</li>
+</ul>
+<p>方案</p>
+<ul>
+<li>查询不需要的记录，使用 limit</li>
+<li>多表关联只返回所需要的列</li>
+<li>select * 不要用</li>
+<li>重复查询相同的数据，可以缓存数据，下次直接读取缓存</li>
+<li>使用索引覆盖扫描，把所有用的列都放到索引中，这样存储引擎不需要回表获取对应行就可以返回结果</li>
+<li>改变数据库和表的结构，修改数据表范式（冗余字段降低范式，用空间换取时间）</li>
+<li>重写 SQL 语句，让优化器可以以更优的方式执行查询</li>
+</ul>
+<h4 id="3-优化长难的查询语句"><a href="#3-优化长难的查询语句" class="headerlink" title="3. 优化长难的查询语句"></a>3. 优化长难的查询语句</h4><p>应当使用一个复杂查询还是多个简单查询？</p>
+<p>MySQL 内部每秒能扫描内存中上百万行的数据，相比之下，响应数据给客户端就要慢得多</p>
+<p>大多数情况下，使用尽可能少的查询是好的，但是有时将一个大的查询分解为多个小的查询也是很有必要的，这样可以方便地做缓存</p>
+<h5 id="切分查询"><a href="#切分查询" class="headerlink" title="切分查询"></a>切分查询</h5><p>将一个大的查询分为多个小的相同的查询</p>
+<p>一次性删除 1000 万的数据比一次删除一万，暂停一会的方案更加损耗服务器开销。</p>
+<h5 id="分解关联查询"><a href="#分解关联查询" class="headerlink" title="分解关联查询"></a>分解关联查询</h5><ul>
+<li>可以将一条关联语句分解成多条 SQL 来执行</li>
+<li>让缓存效率更高</li>
+<li>执行单个查询可以减少锁的竞争</li>
+<li>在应用层做关联可以更容易对数据库进行拆分</li>
+</ul>
+<h4 id="4-优化特定类型的查询语句"><a href="#4-优化特定类型的查询语句" class="headerlink" title="4. 优化特定类型的查询语句"></a>4. 优化特定类型的查询语句</h4><h5 id="优化-count"><a href="#优化-count" class="headerlink" title="优化 count(*)"></a>优化 count(*)</h5><ul>
+<li>count(*) 中的 * 会忽略所有的列，直接统计所有列数，速度更快，因此不要使用 count(列名)</li>
+<li>MyISAM 中，没有任何 where 条件的 count(*) 非常快</li>
+<li>当有 where 条件，MyISAM 的 count 统计也不一定比其他表引擎快</li>
+<li>或者增加一张汇总表</li>
+<li>缓存汇总信息</li>
+</ul>
+<h5 id="优化关联查询"><a href="#优化关联查询" class="headerlink" title="优化关联查询"></a>优化关联查询</h5><ul>
+<li>确认 on 或者 using 子句的列上有索引，如果没有要添加，否则会导致全表扫描</li>
+<li>确保 group by 和 order by 中只有一个表中的列，这样 MySQL 才有可能使用索</li>
+</ul>
+<h5 id="优化子查询"><a href="#优化子查询" class="headerlink" title="优化子查询"></a>优化子查询</h5><p>尽可能使用关联查询来替代</p>
+<h5 id="优化-group-by-和-distinct"><a href="#优化-group-by-和-distinct" class="headerlink" title="优化 group by 和 distinct"></a>优化 group by 和 distinct</h5><ul>
+<li>均可使用索引来优化，是最有效的优化方法</li>
+<li>关联查询中，使用标识列进行分组效率更高，即 group by 后面跟的列名是主键列或 auto_increment 列</li>
+<li>如果不需要排序，进行 group by 时使用 order by null，MySQL 就不会再进行文件排序</li>
+<li>with rollup 超级聚合，尽量挪到应用程序处理，而不应该在数据库中处理</li>
+</ul>
+<h5 id="优化-limit-分页"><a href="#优化-limit-分页" class="headerlink" title="优化 limit 分页"></a>优化 limit 分页</h5><ul>
+<li>limit 偏移量大的时候，查询效率较低</li>
+<li>可以记录上次查询的最大ID，下次查询时直接根据该ID来查询</li>
+</ul>
+<h5 id="优化-union-查询"><a href="#优化-union-查询" class="headerlink" title="优化 union 查询"></a>优化 union 查询</h5><p>使用 union all 替代 union 查询，效率更高，数据去重放到应用层面</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/02/22/linux-%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" rel="prev" title="linux 权限管理">
+                  <i class="fa fa-chevron-left"></i> linux 权限管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/02/26/MySQL-%E5%88%86%E5%8C%BA%E5%88%86%E8%A1%A8/" rel="next" title="MySQL 分区分表">
+                  MySQL 分区分表 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"بحث...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="本文是慕课网 《实例妙解sed 和 awk 的秘密》》 的学习记录的第二部分：sed。 Linux 三大利器： grep, sed, awk.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【记录】sed 学习">
+<meta property="og:url" content="http://zouzhipeng.com/2017/05/25/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91sed%20%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="本文是慕课网 《实例妙解sed 和 awk 的秘密》》 的学习记录的第二部分：sed。 Linux 三大利器： grep, sed, awk.">
+<meta property="og:locale">
+<meta property="og:image" content="http://omp48p40q.bkt.clouddn.com/17-5-25/45710249.jpg">
+<meta property="article:published_time" content="2017-05-25T15:11:12.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.046Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="sed">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://omp48p40q.bkt.clouddn.com/17-5-25/45710249.jpg">
+
+
+<link rel="canonical" href="http://zouzhipeng.com/2017/05/25/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91sed%20%E5%AD%A6%E4%B9%A0/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>【记录】sed 学习 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          المحتويات
+        </li>
+        <li class="sidebar-nav-overview">
+          عام
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-sed-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">1. sed 工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-sed-%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">2. 使用 sed 格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-sed-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">2. sed 基本操作命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-p-%E6%89%93%E5%8D%B0%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">1. -p 打印相关命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%A1%8C%E5%AE%9A%E4%BD%8D"><span class="nav-number">2.2.</span> <span class="nav-text">2. 行定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-sed-%E8%A1%8C%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4"><span class="nav-number">2.3.</span> <span class="nav-text">3. sed 行处理命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4%EF%BC%88Mac%E4%B8%8B%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 基本操作命令（Mac下失效）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%A1%88%E4%BE%8B1-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 案例1 修改配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%A1%88%E4%BE%8B2-%E5%88%A0%E9%99%A4%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E7%A9%BA%E8%A1%8C"><span class="nav-number">2.3.3.</span> <span class="nav-text">3. 案例2 删除文本中的空行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%A1%88%E4%BE%8B3-log-%E4%B8%AD%E6%8F%90%E5%8F%96-error"><span class="nav-number">2.3.4.</span> <span class="nav-text">4. 案例3 log 中提取 error</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-sed-%E6%9B%BF%E6%8D%A2%E5%91%BD%E4%BB%A4-s-%EF%BC%88%E6%A0%B8%E5%BF%83%EF%BC%8C%E9%87%8D%E7%82%B9%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">4. sed 替换命令 s （核心，重点）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%A1%88%E4%BE%8B%EF%BC%9A%E8%8E%B7%E5%8F%96%E7%BD%91%E5%8D%A1%E4%B8%AD%E7%9A%84ip"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 案例：获取网卡中的ip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-sed-%E9%AB%98%E7%BA%A7%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">3. sed 高级操作命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%EF%BC%9A-%E5%A4%9A%E4%B8%AAsed%E5%91%BD%E4%BB%A4%EF%BC%8C%E7%94%A8%EF%BC%9B%E5%88%86%E5%BC%80"><span class="nav-number">3.1.</span> <span class="nav-text">1. -{ }： 多个sed命令，用；分开</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-n-%E8%AF%BB%E5%8F%96%E4%B8%8B%E4%B8%80%E4%B8%AA%E8%BE%93%E5%85%A5%E8%A1%8C%EF%BC%88%E7%94%A8%E4%B8%8B%E4%B8%80%E4%B8%AA%E5%91%BD%E4%BB%A4%E5%A4%84%E7%90%86%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2. -n 读取下一个输入行（用下一个命令处理）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-amp-%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">3. &amp; 符号使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A-%E5%A4%A7%E5%B0%8F%E5%86%99%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.3.1.</span> <span class="nav-text">案例： 大小写转换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%EF%BC%88%EF%BC%89%E7%AC%A6%E5%8F%B7"><span class="nav-number">3.4.</span> <span class="nav-text">4. （）符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-rw-%E5%91%BD%E4%BB%A4"><span class="nav-number">3.5.</span> <span class="nav-text">5. rw 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-q-%E5%91%BD%E4%BB%A4"><span class="nav-number">3.6.</span> <span class="nav-text">6. q 命令</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">المقالات</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">التصنيفات</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">الوسوم</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2017/05/25/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91sed%20%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【记录】sed 学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">نُشر في</span>
+
+      <time title="أُنشأ: 2017-05-25 23:11:12" itemprop="dateCreated datePublished" datetime="2017-05-25T23:11:12+08:00">2017-05-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">عُدل في</span>
+        <time title="عُدل: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">في</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文是慕课网 <a target="_blank" rel="noopener" href="http://www.imooc.com/learn/819">《实例妙解sed 和 awk 的秘密》》</a> 的学习记录的第二部分：sed。</p>
+<p>Linux 三大利器： grep, sed, awk.</p>
+<a id="more"></a>
+
+<h2 id="1-sed-工作原理"><a href="#1-sed-工作原理" class="headerlink" title="1. sed 工作原理"></a>1. sed 工作原理</h2><p>sed 是一种流处理编辑器</p>
+<ol>
+<li>文本或管道输入（正则选定文本）</li>
+<li>读入一行到模式空间（临时缓冲区）</li>
+<li>sed命令处理</li>
+<li>结果输出到屏幕</li>
+<li>重复第2步操作</li>
+</ol>
+<p>sed 一次处理一行内容</p>
+<p>sed 不改变文件内容 （除非重定向）</p>
+<h3 id="2-使用-sed-格式"><a href="#2-使用-sed-格式" class="headerlink" title="2. 使用 sed 格式"></a>2. 使用 sed 格式</h3><ul>
+<li>命令行格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed [options] &#39;command&#39; file(s)</span><br></pre></td></tr></table></figure>
+
+<p>options: -e, -n</p>
+<p>command: 行定位（正则） + sed命令 （操作）</p>
+<ul>
+<li>脚本格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed -f scriptfile file(s)</span><br></pre></td></tr></table></figure>
+
+<p>举个栗子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; p 即 print，打印命令</span><br><span class="line">$ sed -n &#39;root&#x2F;p&#39;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-sed-基本操作命令"><a href="#2-sed-基本操作命令" class="headerlink" title="2. sed 基本操作命令"></a>2. sed 基本操作命令</h2><h3 id="1-p-打印相关命令"><a href="#1-p-打印相关命令" class="headerlink" title="1. -p 打印相关命令"></a>1. -p 打印相关命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;p&#39; passwd</span><br></pre></td></tr></table></figure>
+
+<p>结果每一行都被输出了两次，为什么？</p>
+<p>sed 原理为读入一行，输出一行到屏幕，现在中间又加入一个打印的步骤，所以就出现了重复。</p>
+<p>如何规避？</p>
+<p>再添加一个 -n 参数即可。该参数一般与 p 参数一起使用，表示只打印出相关的行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed -n &#39;p&#39; passwd</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-行定位"><a href="#2-行定位" class="headerlink" title="2. 行定位"></a>2. 行定位</h3><ul>
+<li>定位一行： x; /pattern/;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 打印第33行</span><br><span class="line">$ sed -n &#39;33p&#39; passwd</span><br><span class="line">_svn:*:73:73:SVN Server:&#x2F;var&#x2F;empty:&#x2F;usr&#x2F;bin&#x2F;false</span><br></pre></td></tr></table></figure>
+
+<p>通过 nl 命令查看行号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 打印第33行</span><br><span class="line">$ nl passwd | sed -n &#39;33p&#39;</span><br><span class="line">    33	_svn:*:73:73:SVN Server:&#x2F;var&#x2F;empty:&#x2F;usr&#x2F;bin&#x2F;false</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 打印包含root的行</span><br><span class="line">$ sed -n &#39;&#x2F;root&#x2F;p&#39; passwd</span><br><span class="line">root:*:0:0:System Administrator:&#x2F;var&#x2F;root:&#x2F;bin&#x2F;sh</span><br><span class="line">daemon:*:1:1:System Services:&#x2F;var&#x2F;root:&#x2F;usr&#x2F;bin&#x2F;false</span><br><span class="line">_cvmsroot:*:212:212:CVMS Root:&#x2F;var&#x2F;empty:&#x2F;usr&#x2F;bin&#x2F;false</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>定位多行（范围）： x,y; /pattery/,x;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 打印10到20行</span><br><span class="line">$ nl passwd | sed -n &#39;10,20p&#39;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 打印第一个包含root的行到第一个包含www的行之间所有的行</span><br><span class="line">$ nl passwd | sed -n &#39;&#x2F;root&#x2F;,&#x2F;www&#x2F;p</span><br></pre></td></tr></table></figure>
+
+<p>都是匹配第一个</p>
+<ul>
+<li>取反操作 !</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 不打印第20行</span><br><span class="line">$ nl passwd | sed -n &#39;20!p&#39;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 不打印10到20行</span><br><span class="line">$ nl passwd | sed -n &#39;10,20!p&#39;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>定位间隔几行 first~step</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 输出奇数行，Mac亲测无效，CentOS 有效</span><br><span class="line">$ nl passwd | sed -n &#39;1~2p&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     5	lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-sed-行处理命令"><a href="#3-sed-行处理命令" class="headerlink" title="3. sed 行处理命令"></a>3. sed 行处理命令</h3><h4 id="1-基本操作命令（Mac下失效）"><a href="#1-基本操作命令（Mac下失效）" class="headerlink" title="1. 基本操作命令（Mac下失效）"></a>1. 基本操作命令（Mac下失效）</h4><p>a：新增行</p>
+<p>i：插入行</p>
+<p>c：替代行</p>
+<p>d：删除行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 在第5行后面添加分隔线</span><br><span class="line">$ nl passwd | sed &#39;5a &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     4	adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     5	lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     6	sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync</span><br><span class="line">     ...</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 在第1-5行后面添加分隔线</span><br><span class="line">$ nl passwd | sed &#39;1,5a &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     4	adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     5	lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     6	sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync</span><br><span class="line">     ...</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 在第1-5行之前添加分隔线</span><br><span class="line">$ nl passwd | sed &#39;5i &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     4	adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     5	lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 第5行替换为其他内容</span><br><span class="line">$ nl passwd | sed &#39;5c &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     4	adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     6	sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ nl passwd | sed &#39;1,5c &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#39;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     6	sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync</span><br><span class="line">     7	shutdown:x:6:0:shutdown:&#x2F;sbin:&#x2F;sbin&#x2F;shutdown</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意替换规则与插入规则的区别，连续行的替换是整体替换，而不是一行一行。</p>
+</blockquote>
+<p>随意感受一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">$ nl passwd | sed &#39;&#x2F;nologin&#x2F;c &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">     6	sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync</span><br><span class="line">     7	shutdown:x:6:0:shutdown:&#x2F;sbin:&#x2F;sbin&#x2F;shutdown</span><br><span class="line">     8	halt:x:7:0:halt:&#x2F;sbin:&#x2F;sbin&#x2F;halt</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">    25	zzp:x:1000:1000::&#x2F;home&#x2F;zzp:&#x2F;bin&#x2F;bash</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 删除行，不会影响源文件</span><br><span class="line">$ nl passwd | sed &#39;&#x2F;root&#x2F;d&#39;</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     4	adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     5	lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     6	sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="2-案例1-修改配置文件"><a href="#2-案例1-修改配置文件" class="headerlink" title="2. 案例1 修改配置文件"></a>2. 案例1 修改配置文件</h4><p>简单的操作就可以替代 vim 了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 在文档末尾增加一些内容</span><br><span class="line">$ sed &#39;$a new line \nnew line&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-案例2-删除文本中的空行"><a href="#3-案例2-删除文本中的空行" class="headerlink" title="3. 案例2 删除文本中的空行"></a>3. 案例2 删除文本中的空行</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;&#x2F;^$&#x2F;d&#39; file</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-案例3-log-中提取-error"><a href="#4-案例3-log-中提取-error" class="headerlink" title="4. 案例3 log 中提取 error"></a>4. 案例3 log 中提取 error</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed -n &#39;&#x2F;Error&#x2F;p&#39; file</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-sed-替换命令-s-（核心，重点）"><a href="#4-sed-替换命令-s-（核心，重点）" class="headerlink" title="4. sed 替换命令 s （核心，重点）"></a>4. sed 替换命令 s （核心，重点）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;nologin&#x2F;login&#x2F;&#39; passwd</span><br><span class="line">root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;login</span><br><span class="line">daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;login</span><br><span class="line">adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;login</span><br><span class="line">lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;login</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;:&#x2F;%&#x2F;&#39; passwd</span><br><span class="line">root%x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">bin%x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">daemon%x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">adm%x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">lp%x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<p>这里出现了一个问题，每一行只替换了第一个匹配。</p>
+<p>添加全局标记 g 即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;:&#x2F;%&#x2F;g&#39; passwd</span><br><span class="line">root%x%0%0%root%&#x2F;root%&#x2F;bin&#x2F;bash</span><br><span class="line">bin%x%1%1%bin%&#x2F;bin%&#x2F;sbin&#x2F;nologin</span><br><span class="line">daemon%x%2%2%daemon%&#x2F;sbin%&#x2F;sbin&#x2F;nologin</span><br><span class="line">adm%x%3%4%adm%&#x2F;var&#x2F;adm%&#x2F;sbin&#x2F;nologin</span><br><span class="line">lp%x%4%7%lp%&#x2F;var&#x2F;spool&#x2F;lpd%&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-案例：获取网卡中的ip"><a href="#1-案例：获取网卡中的ip" class="headerlink" title="1. 案例：获取网卡中的ip"></a>1. 案例：获取网卡中的ip</h4><p>思路：首先取出 ifconfig 命令输出的第二行，然后将 ip 前后两部分无用的信息分别替换为空即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 取出所需行</span><br><span class="line">$ ifconfig | sed -n &#39;&#x2F;inet .*broadcast.*&#x2F;p&#39;</span><br><span class="line">        inet 172.17.147.89  netmask 255.255.240.0  broadcast 172.17.159.255</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 替换ip前的字符为空</span><br><span class="line">$ ifconfig | sed -n &#39;&#x2F;inet .*broadcast.*&#x2F;p&#39; | sed &#39;s&#x2F;inet &#x2F;&#x2F;&#39;</span><br><span class="line">        172.17.147.89  netmask 255.255.240.0  broadcast 172.17.159.255</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 替换ip后的字符为空</span><br><span class="line">$ ifconfig | sed -n &#39;&#x2F;inet .*broadcast.*&#x2F;p&#39; | sed &#39;s&#x2F;inet &#x2F;&#x2F;&#39; | sed &#39;s&#x2F;netmask.*&#x2F;&#x2F;&#39;</span><br><span class="line">        172.17.147.89</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 替换可能漏掉的空格</span><br><span class="line">$ ifconfig | sed -n &#39;&#x2F;inet .*broadcast.*&#x2F;p&#39; | sed &#39;s&#x2F;inet &#x2F;&#x2F;&#39; | sed &#39;s&#x2F;netmask.*&#x2F;&#x2F;&#39; | sed &#39;s&#x2F;\ &#x2F;&#x2F;&#39;</span><br><span class="line">       172.17.147.89</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-sed-高级操作命令"><a href="#3-sed-高级操作命令" class="headerlink" title="3. sed 高级操作命令"></a>3. sed 高级操作命令</h2><h3 id="1-：-多个sed命令，用；分开"><a href="#1-：-多个sed命令，用；分开" class="headerlink" title="1. -{ }： 多个sed命令，用；分开"></a>1. -{ }： 多个sed命令，用；分开</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 先将2-10行删除，然后将false替换为true，两个命令写到一起，这里&#123;&#125;不用转义</span><br><span class="line">$ nl passwd | sed &#39;&#123;2,10d;s&#x2F;false&#x2F;true&#x2F;&#125;&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">    11	games:x:12:100:games:&#x2F;usr&#x2F;games:&#x2F;sbin&#x2F;nologin</span><br><span class="line">    12	ftp:x:14:50:FTP User:&#x2F;var&#x2F;ftp:&#x2F;sbin&#x2F;nologin</span><br><span class="line">    13	nobody:x:99:99:Nobody:&#x2F;:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-n-读取下一个输入行（用下一个命令处理）"><a href="#2-n-读取下一个输入行（用下一个命令处理）" class="headerlink" title="2. -n 读取下一个输入行（用下一个命令处理）"></a>2. -n 读取下一个输入行（用下一个命令处理）</h3><p>有一个跳行的过程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ nl passwd | sed -n &#39;&#123;n;p&#125;&#39;</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     4	adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     6	sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync</span><br><span class="line">     8	halt:x:7:0:halt:&#x2F;sbin:&#x2F;sbin&#x2F;halt</span><br></pre></td></tr></table></figure>
+
+<p>这就实现了偶数行输出。如何输出奇数行？先输入p后跳行即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ nl passwd | sed -n &#39;&#123;p;n&#125;&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     5	lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     7	shutdown:x:6:0:shutdown:&#x2F;sbin:&#x2F;sbin&#x2F;shutdown</span><br></pre></td></tr></table></figure>
+
+<p>之前的等效做法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ nl passwd | sed -n &#39;1~2p&#39;</span><br><span class="line">$ nl passwd | sed -n &#39;2~2p&#39;</span><br></pre></td></tr></table></figure>
+
+<p>2,5,8… 这样输出呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 两种方法等效，推荐使用前者</span><br><span class="line">$ nl passwd | sed -n &#39;2~3p&#39;</span><br><span class="line">$ nl passwd | sed -n &#39;&#123;n;p;n&#125;&#39;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-amp-符号使用"><a href="#3-amp-符号使用" class="headerlink" title="3. &amp; 符号使用"></a>3. &amp; 符号使用</h3><p>-&amp;: 替换固定字符串<br>优化替换操作。</p>
+<p>案例： passwd 文件中的用户名后面添加空格，便于阅读。</p>
+<p>分析：</p>
+<ul>
+<li>用户名都是在行首，可以包含字母，中划线和下划线。</li>
+</ul>
+<p>使用 &amp;，就没有必要在替换后的字符串中将替换前的正则重新再写一遍。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;^[a-z_-]\+&#x2F;&amp;   &#x2F;&#39; passwd</span><br><span class="line">root   :x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">bin   :x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">daemon   :x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<p>原来的写法可能是这样的，还不一定能实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;^[a-z_-]\+&#x2F;^[a-z_-]\+  &#x2F;&#39; passwd</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例：-大小写转换"><a href="#案例：-大小写转换" class="headerlink" title="案例： 大小写转换"></a>案例： 大小写转换</h4><p>将用户名的首字母转化为大写/小写</p>
+<p>元字符 </p>
+<ul>
+<li>\u \l (首字母转换) </li>
+<li>\U \L (字符串转换) </li>
+<li>uppercase, lowercase</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;^[a-z_-]\+&#x2F;\u&amp;&#x2F;&#39; passwd</span><br><span class="line">Root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">Bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">Daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">Adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;^[a-z_-]\+&#x2F;\U&amp;&#x2F;&#39; passwd</span><br><span class="line">ROOT:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">BIN:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">DAEMON:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<p>文件名转大写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ls *.txt | sed &#39;s&#x2F;^\w\+&#x2F;\U&amp;&#x2F;&#39;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="4-（）符号"><a href="#4-（）符号" class="headerlink" title="4. （）符号"></a>4. （）符号</h3><p>一个括号代表一个要被替换的部分。注意转义括号。</p>
+<p>示例：数据筛选，获取passwd中 USER, UID  和 GID</p>
+<p>一个一个获取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;\(^[a-z_-]\+\):.*$&#x2F;\1&#x2F;&#39; passwd</span><br><span class="line">root</span><br><span class="line">bin</span><br><span class="line">daemon</span><br><span class="line">adm</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ sed &#39;s&#x2F;\(^[a-z_-]\+\):x:\([0-9]\+\).*$&#x2F;\1 \2&#x2F;&#39; passwd</span><br><span class="line">root 0</span><br><span class="line">bin 1</span><br><span class="line">daemon 2</span><br><span class="line">adm 3</span><br><span class="line">lp 4</span><br><span class="line">sync 5</span><br><span class="line">shutdown 6</span><br><span class="line">halt 7</span><br><span class="line">mail 8</span><br><span class="line">operator 11</span><br><span class="line">games 12</span><br><span class="line">ftp 14</span><br><span class="line">nobody 99</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ $ sed &#39;s&#x2F;\(^[a-z_-]\+\):x:\([0-9]\+\):\([0-9]\+\).*$&#x2F;USER:\1 UID:\2 GID:\3&#x2F;&#39; passwd</span><br><span class="line">USER:root UID:0 GID:0</span><br><span class="line">USER:bin UID:1 GID:1</span><br><span class="line">USER:daemon UID:2 GID:2</span><br><span class="line">USER:adm UID:3 GID:4</span><br><span class="line">USER:lp UID:4 GID:7</span><br><span class="line">USER:sync UID:5 GID:0</span><br><span class="line">USER:shutdown UID:6 GID:0</span><br><span class="line">USER:halt UID:7 GID:0</span><br><span class="line">USER:mail UID:8 GID:12</span><br><span class="line">USER:operator UID:11 GID:0</span><br><span class="line">USER:games UID:12 GID:100</span><br><span class="line">USER:ftp UID:14 GID:50</span><br><span class="line">USER:nobody UID:99 GID:99</span><br></pre></td></tr></table></figure>
+
+<p>示例： 获取网卡IP</p>
+<p>分析：之前我们是将IP行分为三段，分别将前后两段无用的信息替换为空。现在我们还是将该行分为三段，但是只要获取第二段即可。</p>
+<p>先找到IP所在的行，匹配第一部分，注意别漏了空格。第二部分用括号括起来，用于输出，第三部分不用管。最后将第二部分打印输出即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ifconfig | sed -n &#39;&#x2F;inet &#x2F;p&#39; | sed -n &#39;1p&#39; | sed &#39;s&#x2F;[a-z ]\+\([0-9.]\+\) .*$&#x2F;\1&#x2F;&#39;</span><br><span class="line">172.17.147.89</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-rw-命令"><a href="#5-rw-命令" class="headerlink" title="5. rw 命令"></a>5. rw 命令</h3><p>读和写命令，文件互操作</p>
+<p>r: 复制指定文件插入到匹配行</p>
+<p>w: 复制匹配行拷贝至指定文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ echo -e &#39;11111\n22222\n33333&#39; &gt; 123.txt</span><br><span class="line">$ echo -e &#39;aaaa\nbbbbb\ncccc&#39; &gt; abc.txt</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 读取文件123.txt，将结果放入到abc.txt 中，放置位置为第一行后。</span><br><span class="line">$ sed &#39;1r 123.txt&#39; abc.txt</span><br><span class="line">aaaa</span><br><span class="line">11111</span><br><span class="line">22222</span><br><span class="line">33333</span><br><span class="line">bbbbb</span><br><span class="line">cccc</span><br></pre></td></tr></table></figure>
+
+<p>如果不指定行号，将会在目录文件的每一行后面插入读取到的文件内容。</p>
+<p>读文件后，两个文件的内容都没有发生改变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 将123.txt文件的第一行写入abc.txt</span><br><span class="line">$ sed &#39;1w abc.txt&#39; 123.txt</span><br></pre></td></tr></table></figure>
+
+<p>写操作后，abc.txt内容受影响，原内容消失，只剩下本次操作写入的内容。不指定行号就相当于文件内容拷贝。</p>
+<p>引号中是rw直接操作的文件。使用w的时候要格外小心。</p>
+<h3 id="6-q-命令"><a href="#6-q-命令" class="headerlink" title="6. q 命令"></a>6. q 命令</h3><p>退出 sed</p>
+<p>在执行中间提前退出sed，没必要每次都执行到最后一行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 执行到第5行退出sed</span><br><span class="line">$ nl passwd | sed &#39;5q&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     4	adm:x:3:4:adm:&#x2F;var&#x2F;adm:&#x2F;sbin&#x2F;nologin</span><br><span class="line">     5	lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin</span><br><span class="line">&#x2F;&#x2F; 找到第一个 nologin 就退出 sed</span><br><span class="line">$ nl passwd | sed &#39;&#x2F;nologin&#x2F;q&#39;</span><br><span class="line">     1	root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash</span><br><span class="line">     2	bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://omp48p40q.bkt.clouddn.com/17-5-25/45710249.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/sed/" rel="tag"># sed</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/05/24/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0/" rel="prev" title="【记录】正则表达式学习">
+                  <i class="fa fa-chevron-left"></i> 【记录】正则表达式学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/05/27/Mac-%E5%B9%B3%E5%8F%B0%E4%B8%8B%E9%85%8D%E7%BD%AE-Charles-%E5%AE%9E%E7%8E%B0%E6%8A%93%E5%8F%96%E6%89%8B%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/" rel="next" title="Mac 平台下配置 Charles 实现抓取手机网络请求">
+                  Mac 平台下配置 Charles 实现抓取手机网络请求 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
