@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. http 缓存机制http 缓存模型中，如果请求成功会有三种情况  200 from cache：直接从本地缓存中获取响应，最快速、最省流量，因为根本没有向服务器发送请求； 304 not modified：协商缓存，浏览器在本地没有命中的情况下，请求头中发送一定的校验数据到服务器，如果服务端数据没有改变，浏览器从本地缓存响应，返回 304，即先去服务端验证文件是否被修改过。这种方式快速，发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高并发大流量解决方案 3 浏览器缓存和压缩优化技术">
+<meta property="og:url" content="http://zouzhipeng.com/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E5%92%8C%E5%8E%8B%E7%BC%A9%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="1. http 缓存机制http 缓存模型中，如果请求成功会有三种情况  200 from cache：直接从本地缓存中获取响应，最快速、最省流量，因为根本没有向服务器发送请求； 304 not modified：协商缓存，浏览器在本地没有命中的情况下，请求头中发送一定的校验数据到服务器，如果服务端数据没有改变，浏览器从本地缓存响应，返回 304，即先去服务端验证文件是否被修改过。这种方式快速，发">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-02-15T08:31:49.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.061Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="高并发">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://zouzhipeng.com/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E5%92%8C%E5%8E%8B%E7%BC%A9%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>高并发大流量解决方案 3 浏览器缓存和压缩优化技术 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E5%92%8C%E5%8E%8B%E7%BC%A9%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          高并发大流量解决方案 3 浏览器缓存和压缩优化技术
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-02-15 16:31:49" itemprop="dateCreated datePublished" datetime="2018-02-15T16:31:49+08:00">2018-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="1-http-缓存机制"><a href="#1-http-缓存机制" class="headerlink" title="1. http 缓存机制"></a>1. http 缓存机制</h3><p>http 缓存模型中，如果请求成功会有三种情况</p>
+<ul>
+<li><code>200 from cache</code>：直接从本地缓存中获取响应，最快速、最省流量，因为根本没有向服务器发送请求；</li>
+<li><code>304 not modified</code>：协商缓存，浏览器在本地没有命中的情况下，请求头中发送一定的校验数据到服务器，如果服务端数据没有改变，浏览器从本地缓存响应，返回 304，即先去服务端验证文件是否被修改过。这种方式快速，发送的数据很少，只返回一些基本的响应头信息，数据量很小，不发送实际响应体。</li>
+<li><code>200 ok</code>：以上两种缓存全部失败，服务器返回完整响应，没有用到缓存，相对最慢。</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="1-本地缓存"><a href="#1-本地缓存" class="headerlink" title="1. 本地缓存"></a>1. 本地缓存</h4><p>浏览器认为本地缓存可以使用，不会去请求服务端。</p>
+<p>相关 <code>Header</code></p>
+<ol>
+<li><code>Pragma</code>：HTTP1.0 时代的遗留产物，该字段被设置为 <code>no-cache</code> 时，会告知浏览器禁用本地缓存，即每次都向服务器发送请求。</li>
+<li><code>Expires</code>：HTTP1.0 时代用来启用本地缓存的字段，标记缓存的过期时间。<code>Expires</code> 对应一个格林威治时间，告知浏览器缓存过期的时刻，如果还没到期，表名缓存有效，无需请求服务器。问题：服务端的时间和客户端的时间基准不一定一致，如果时间差距大，会影响缓存效果。</li>
+<li><code>Cache-Control</code>：HTTP1.1 针对 <code>Expires</code> 时间基准不一致的问题的解决方案。该参数告知浏览器缓存过期的时间间隔（秒数）而不是时刻，即使具体时间不一致，也不影响缓存的效果。设置为 <code>no-store</code>，则禁止浏览器缓存响应；<code>no-cache</code>，不允许直接使用本地缓存，先发起请求和服务器协商；<code>max-age=3600</code>，告知浏览器本地缓存有效的最长期限，单位为秒。</li>
+</ol>
+<blockquote>
+<p><span style="color:red">优先级： <code>Pragma</code> &gt; <code>Cache-Control</code> &gt; <code>Expires</code></sapn></p>
+</blockquote>
+<h4 id="2-协商缓存"><a href="#2-协商缓存" class="headerlink" title="2. 协商缓存"></a>2. 协商缓存</h4><p>  当浏览器没有命中本地缓存，如本地缓存过期或者响应中声明不允许直接使用本地缓存，那么浏览器肯定会发起服务端请求。</p>
+<p>  服务端会验证数据是否被修改，如果没有，通知浏览器使用本地缓存。</p>
+<p>  相关 <code>Header</code></p>
+<ol>
+<li><code>Last-Modified</code>：资源的最后修改时间，浏览器请求一个资源的时候，服务端进行响应，并带一个 <code>Last-Modified</code>，下次再请求服务器的时候，带着这个时间（header 中添加 <code>If-Modified-Since</code>），服务器会判断这个时间点之后，该资源是否发生了修改，如果没有修改，会返回304，告知浏览器使用本地缓存；<ol>
+<li><code>ETag</code>：HTTP1.1 推出，文件的指纹标识符，第二次浏览器请求服务的时候，带着这个指纹（header 中添加 <code>If-None-Match</code>），如果文件内容修改，指纹会改变。</li>
+</ol>
+</li>
+</ol>
+<h4 id="3-缓存策略的选择"><a href="#3-缓存策略的选择" class="headerlink" title="3. 缓存策略的选择"></a>3. 缓存策略的选择</h4><h5 id="1-适合缓存的内容"><a href="#1-适合缓存的内容" class="headerlink" title="1. 适合缓存的内容"></a>1. 适合缓存的内容</h5><ul>
+<li>不变的图片、logo 等；</li>
+<li>js、css 静态文件；</li>
+<li>可下载的内容、媒体文件等；</li>
+</ul>
+<h5 id="2-建议使用协商缓存的内容"><a href="#2-建议使用协商缓存的内容" class="headerlink" title="2. 建议使用协商缓存的内容"></a>2. 建议使用协商缓存的内容</h5><p>经常改变的文件适合使用协商缓存，如 </p>
+<ul>
+<li>html 文件；</li>
+<li>经常替换的图片；</li>
+<li>经常修改的 js、css 文件。</li>
+</ul>
+<p>js、css 文件的加载可以加入文件的签名来拒绝缓存，如时间戳、版本号等。index.css?签名</p>
+<h5 id="3-不建议缓存的内容"><a href="#3-不建议缓存的内容" class="headerlink" title="3. 不建议缓存的内容"></a>3. 不建议缓存的内容</h5><ul>
+<li>用户隐私等敏感数据；</li>
+<li>经常改变的API数据接口。</li>
+</ul>
+<h3 id="2-nginx-配置缓存策略"><a href="#2-nginx-配置缓存策略" class="headerlink" title="2. nginx 配置缓存策略"></a>2. nginx 配置缓存策略</h3><p>简单示例</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$since = <span class="keyword">isset</span>($_SERVER[<span class="string">&#x27;HTTP_IF_MODIFIED_SINCE&#x27;</span>]) ? $_SERVER[<span class="string">&#x27;HTTP_IF_MODIFIED_SINCE&#x27;</span>] : <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="comment">// 模拟文件修改</span></span><br><span class="line">$lifetime = <span class="number">3600</span>;</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>($since)) &#123;</span><br><span class="line">	<span class="keyword">if</span> (strtotime($since) + $lifetime &gt; time()) &#123;</span><br><span class="line">		header(<span class="string">&#x27;HTTP/1.1 304 Not Modified&#x27;</span>);</span><br><span class="line">		<span class="keyword">exit</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">header(sprintf(<span class="string">&#x27;Last-Modified: %s GMT&#x27;</span>), gmdate(<span class="string">&#x27;D, d M Y H:i:s&#x27;</span>, time()));</span><br><span class="line"><span class="keyword">echo</span> time();</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-本地缓存配置"><a href="#1-本地缓存配置" class="headerlink" title="1. 本地缓存配置"></a>1. 本地缓存配置</h4><p><code>add_header</code> 指令：添加状态码为2XX和3XX的响应头信息。</p>
+<p>语法： <code>add_header name value [always];</code> name 可以为<code>pragma</code>/<code>cache-control</code>/<code>expires</code>，可以继承。<span style="color:red">expires 最常用</span>，通知浏览器过期时长，后面跟数字和单位，如 <code>expires 30d;</code>，数值为负相当于 <code>cache-control no-cache;</code>，数值为0或正值相当于 <code>cache-control max-age=指定时间;</code>。</p>
+<p>nginx 配置实例</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> <span class="regexp">~ .*\.(gif|jpg|png|flv|swf|rar|zip)$</span></span><br><span class="line"><span class="regexp"></span>&#123;</span><br><span class="line">	<span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span> <span class="regexp">~ .*\.(js|css)?$</span></span><br><span class="line"><span class="regexp"></span>&#123;</span><br><span class="line">	<span class="attribute">expires</span> <span class="number">12h</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-协商缓存配置"><a href="#2-协商缓存配置" class="headerlink" title="2. 协商缓存配置"></a>2. 协商缓存配置</h4><p>etag指令，指定签名。</p>
+<p>etag on | off， 默认为 on</p>
+<h3 id="3-前端代码和资源的压缩"><a href="#3-前端代码和资源的压缩" class="headerlink" title="3. 前端代码和资源的压缩"></a>3. 前端代码和资源的压缩</h3><p>优势：让资源文件更小，加快文件在网络中的传输，让网页更快地展示，降低带宽和流量开销。</p>
+<p>压缩方式：js、css、图片、HTML文件压缩；gzip 压缩</p>
+<h4 id="1-js-代码的压缩"><a href="#1-js-代码的压缩" class="headerlink" title="1. js 代码的压缩"></a>1. js 代码的压缩</h4><p>一般是去掉多余的空格和回车、替换长变量名、简化一些代码写法等。</p>
+<p>常用压缩工具：UglifyJS、YUI Compressor、Closure Compiler</p>
+<p>在线工具： <a target="_blank" rel="noopener" href="https://tool.css-js.com/">https://tool.css-js.com/</a>  或 <a target="_blank" rel="noopener" href="https://www.css-js.com/">https://www.css-js.com/</a></p>
+<h4 id="2-css-代码压缩"><a href="#2-css-代码压缩" class="headerlink" title="2. css 代码压缩"></a>2. css 代码压缩</h4><p>原理与 js 压缩类似</p>
+<p>常用压缩工具：YUI Compressor、css Compressor</p>
+<h4 id="3-HTML-代码压缩"><a href="#3-HTML-代码压缩" class="headerlink" title="3. HTML 代码压缩"></a>3. HTML 代码压缩</h4><p>不建议使用代码压缩，有时会破坏代码结构，可以使用 gzip 压缩，也可以使用 htmlcompressor 工具，但转换后一定要检查代码结构。</p>
+<p>在线工具： <a target="_blank" rel="noopener" href="http://htmlcompressor.com/compressor/">http://htmlcompressor.com/compressor/</a></p>
+<h4 id="4-图片压缩"><a href="#4-图片压缩" class="headerlink" title="4. 图片压缩"></a>4. 图片压缩</h4><p>压缩工具： <a target="_blank" rel="noopener" href="https://tinypng.com/">tinypng</a>、<a target="_blank" rel="noopener" href="http://www.jpegmini.com/">JpegMini</a>、<a target="_blank" rel="noopener" href="https://www.imageoptim.com/">ImageOptim</a></p>
+<h4 id="5-gzip-压缩"><a href="#5-gzip-压缩" class="headerlink" title="5. gzip 压缩"></a>5. <span style="color:red;">gzip 压缩</span></h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">gzip</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line"><span class="attribute">gzip_buffers</span> <span class="number">32</span> <span class="number">4K</span> | <span class="number">16</span> <span class="number">8K</span>; <span class="comment"># 缓冲，在内存中缓冲几块，每块多大</span></span><br><span class="line">gzip_comp_level [1-9]; 推荐6，压缩级别，级别越高，压得越小，越浪费CPU资源</span><br><span class="line"><span class="attribute">gzip_disable</span> <span class="comment"># 正则匹配UA，什么样的uri不进行gzip</span></span><br><span class="line">gzip_min_length <span class="number">200</span> <span class="comment"># 开始压缩的最小长度</span></span><br><span class="line">gzip_http_version <span class="number">1</span>.<span class="number">0</span> | <span class="number">1</span>.<span class="number">1</span> <span class="comment"># 开始压缩的http版本</span></span><br><span class="line">gzip_proxied <span class="comment"># 设置请求的代理服务器</span></span><br><span class="line">gzip_types text/plain application/xml <span class="comment"># 对哪些类型的文件启用压缩</span></span><br><span class="line">gzip_vary <span class="literal">on</span> | <span class="literal">off</span> <span class="comment"># 是否传输gzip压缩标记</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="6-其他工具"><a href="#6-其他工具" class="headerlink" title="6. 其他工具"></a>6. 其他工具</h4><p>自动化构建工具 Grunt 等。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag"># 高并发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-2-%E5%87%8F%E5%B0%91-http-%E8%AF%B7%E6%B1%82%E6%AC%A1%E6%95%B0/" rel="prev" title="高并发大流量解决方案 2 减少 http 请求次数">
+      <i class="fa fa-chevron-left"></i> 高并发大流量解决方案 2 减少 http 请求次数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-4-%E4%BD%BF%E7%94%A8-CDN-%E5%8A%A0%E9%80%9F/" rel="next" title="高并发大流量解决方案 4 使用 CDN 加速">
+      高并发大流量解决方案 4 使用 CDN 加速 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-http-%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">1. http 缓存机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.</span> <span class="nav-text">1. 本地缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-number">1.2.</span> <span class="nav-text">2. 协商缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">1.3.</span> <span class="nav-text">3. 缓存策略的选择</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E9%80%82%E5%90%88%E7%BC%93%E5%AD%98%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 适合缓存的内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 建议使用协商缓存的内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E4%B8%8D%E5%BB%BA%E8%AE%AE%E7%BC%93%E5%AD%98%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 不建议缓存的内容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-nginx-%E9%85%8D%E7%BD%AE%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text">2. nginx 配置缓存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">1. 本地缓存配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">2. 协商缓存配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E5%92%8C%E8%B5%84%E6%BA%90%E7%9A%84%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.</span> <span class="nav-text">3. 前端代码和资源的压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-js-%E4%BB%A3%E7%A0%81%E7%9A%84%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.1.</span> <span class="nav-text">1. js 代码的压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-css-%E4%BB%A3%E7%A0%81%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.2.</span> <span class="nav-text">2. css 代码压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-HTML-%E4%BB%A3%E7%A0%81%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.3.</span> <span class="nav-text">3. HTML 代码压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%9B%BE%E7%89%87%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.4.</span> <span class="nav-text">4. 图片压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-gzip-%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.5.</span> <span class="nav-text">5. gzip 压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="nav-number">3.6.</span> <span class="nav-text">6. 其他工具</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

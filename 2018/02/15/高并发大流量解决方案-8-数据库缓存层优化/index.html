@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="数据库缓存层优化1. 什么是数据库缓存MySQL 等一些常见的关系型数据库的数据都存储在磁盘当中，在高并发场景下，业务应用对 MySQL 产生的增删改查操作造成巨大的 I&#x2F;O 开销和查询压力，这无疑对数据库和服务器都是一种巨大的压力，为了解决此类问题，缓存数据的概念应运而生。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高并发大流量解决方案 8  数据库缓存层优化">
+<meta property="og:url" content="http://zouzhipeng.com/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-8-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98%E5%B1%82%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="数据库缓存层优化1. 什么是数据库缓存MySQL 等一些常见的关系型数据库的数据都存储在磁盘当中，在高并发场景下，业务应用对 MySQL 产生的增删改查操作造成巨大的 I&#x2F;O 开销和查询压力，这无疑对数据库和服务器都是一种巨大的压力，为了解决此类问题，缓存数据的概念应运而生。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-02-15T08:34:29.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.062Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="高并发">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://zouzhipeng.com/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-8-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98%E5%B1%82%E4%BC%98%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>高并发大流量解决方案 8  数据库缓存层优化 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-8-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98%E5%B1%82%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          高并发大流量解决方案 8  数据库缓存层优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-02-15 16:34:29" itemprop="dateCreated datePublished" datetime="2018-02-15T16:34:29+08:00">2018-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="数据库缓存层优化"><a href="#数据库缓存层优化" class="headerlink" title="数据库缓存层优化"></a>数据库缓存层优化</h3><h4 id="1-什么是数据库缓存"><a href="#1-什么是数据库缓存" class="headerlink" title="1. 什么是数据库缓存"></a>1. 什么是数据库缓存</h4><p>MySQL 等一些常见的关系型数据库的数据都存储在磁盘当中，在高并发场景下，业务应用对 MySQL 产生的增删改查操作造成巨大的 I/O 开销和查询压力，这无疑对数据库和服务器都是一种巨大的压力，为了解决此类问题，缓存数据的概念应运而生。</p>
+<a id="more"></a>
+
+<p>优势：</p>
+<ul>
+<li>极大地解决数据库服务器的压力</li>
+<li>提高应用数据的响应速度</li>
+</ul>
+<p>常见的缓存形式：<b style="color:red;">内存缓存（尽量使用）</b>、文件缓存</p>
+<h4 id="2-为什么要使用数据库缓存"><a href="#2-为什么要使用数据库缓存" class="headerlink" title="2. 为什么要使用数据库缓存"></a>2. 为什么要使用数据库缓存</h4><p>缓存数据是为了让客户端很少甚至不访问数据库服务器进行数据的查询，高并发下，能最大程度地降低对数据库服务器的访问压力。</p>
+<blockquote>
+<p>流程</p>
+</blockquote>
+<p>用户请求 – 数据查询 – 连接数据库服务器并查询数据 – 将数据缓存起来（HTML、<b style='color:red'>内存</b>、json、序列化） – 显示给客户端</p>
+<p>用户再次请求或新用户访问 – 数据查询 – 直接从缓存中获取数据 – 显示给客户端</p>
+<p>缓存需要考虑的问题</p>
+<ul>
+<li>缓存方式的选择：尽量使用内存</li>
+<li>缓存场景的选择：哪些数据适合使用缓存，如不经常修改的数据</li>
+<li>缓存数据的实时性，不建议同步地修改</li>
+<li>缓存数据的稳定性 </li>
+</ul>
+<h4 id="3-使用-MySQL-查询缓存"><a href="#3-使用-MySQL-查询缓存" class="headerlink" title="3. 使用 MySQL 查询缓存"></a>3. 使用 MySQL 查询缓存</h4><h5 id="1-启用-MySQL-查询缓存"><a href="#1-启用-MySQL-查询缓存" class="headerlink" title="1. 启用 MySQL 查询缓存"></a>1. 启用 MySQL 查询缓存</h5><p>可极大降低 CPU 使用率</p>
+<blockquote>
+<p>开启方法：</p>
+</blockquote>
+<p><code>query_cache_type</code>: 查询缓存类型，有 0，1，2 三个值。0 表示不使用查询缓存；1 表示始终使用查询缓存；2 表示按需使用查询缓存。</p>
+<p><code>query_cache_type=1</code> 时，也可以在查询语句中关闭查询缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT SQL_NO_CACHE * FROM my_table WHERE condition;</span><br></pre></td></tr></table></figure>
+
+<p><code>query_cache_type=2</code> 时，可按需使用查询缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT SQL_CACHE * FROM my_table WHERE condition;</span><br></pre></td></tr></table></figure>
+
+<p>query_cache_size: 默认情况下，值为0，表示为查询缓存预留的内存为 0，则无法使用查询缓存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET GLOBAL query_cache_size &#x3D; 134217728; (128M)</span><br></pre></td></tr></table></figure>
+
+<p>查询缓存可以看做是 SQL 文本和查询结果的映射，第二次查询的 SQL 和第一次查询的 SQL 完全相同（多一个空格都不行），则会使用缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW STATUS LIKE &#39;Qcache_hits&#39;; &#x2F;&#x2F; 查看命中次数</span><br></pre></td></tr></table></figure>
+
+<p>表的结构或数据发送改变时，查询缓存中的数据不再有效（即时失效），如果数据表的写入或修改频率比较高，查询缓存就失去意义了。</p>
+<blockquote>
+<p>清理缓存</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FLUSH QUERY CACHE; &#x2F;&#x2F; 清理查询缓存内存碎片</span><br><span class="line">RESET QUERY CACHE; &#x2F;&#x2F; 从查询缓存中移除所有查询</span><br><span class="line">FLUSH TABLES; &#x2F;&#x2F; 关闭所有打开的表，同时该操作将会清空查询缓存中的内容</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-使用-memcache-缓存"><a href="#4-使用-memcache-缓存" class="headerlink" title="4. 使用 memcache 缓存"></a>4. 使用 memcache 缓存</h4><p>对于大型站点，如果没有中间缓存层，当流量打入数据库层时，即便之前的几层为我们挡住一部分流量，但是在大并发的情况下，还是会有大量请求涌入数据库层，这样对于数据库服务器的压力冲击很大，响应速度也会下降，因此添加中间缓存层很有必要。</p>
+<p>memcache 是一套分布式的高速缓存系统，目前被许多网站使用以提升网站的访问速度，尤其对于一些大型的、需要频繁访问数据库的网站访问速度提升效果十分显著。</p>
+<p>memcache 是一个高性能的分布式的内存对象缓存系统，通过在内存里维护一个统一的巨大的 hash 表，它能够用来存储各种格式的数据，包括图像、视频、文件以及数据库检索的结果等。简单说就是将数据调用到内存，然后从内存中读取，从而大大提高读取速度。</p>
+<blockquote>
+<p>工作流程：</p>
+</blockquote>
+<p>先检查客户端的请求数据是否在 memcached 中，如有，直接把请求数据返回，不再对数据库进行任何操作；如果请求的数据不在 memcached 中，就去查数据库，把从数据库中获取的数据返回给客户端，同时把数据缓存一份到 memcached 中。</p>
+<blockquote>
+<p>常用方法：</p>
+</blockquote>
+<ul>
+<li>获取：get(key)</li>
+<li>设置：set(key, val, expire)</li>
+<li>删除：delete(key)</li>
+</ul>
+<blockquote>
+<p>通用缓存机制：</p>
+</blockquote>
+<p>用查询的方法名 + 参数作为查询时的 key value 对应的 key 值。</p>
+<h4 id="5-使用-Redis-缓存"><a href="#5-使用-Redis-缓存" class="headerlink" title="5. 使用 Redis 缓存"></a>5. 使用 Redis 缓存</h4><p>与 memcache 的区别</p>
+<ul>
+<li>性能相差不大</li>
+<li>Redis 在 2.0 版本后增加了自己的 VM 特性，突破物理内存的限制，memcache 可以修改最大可用内存，采用 LRU（Least recently used，最近最少使用）算法</li>
+<li>Redis 依赖客户端来实现分布式读写</li>
+<li>memcache 本身没有数据冗余机制，Redis 支持（快照、AOF），依赖快照进行持久化，AOF 增强了可靠性的同时，对性能有所影响。</li>
+<li>memcache 不支持持久化，通常做缓存，提升性能；</li>
+<li>memcache 在并发场景下，用 cas 保证一致性，Redis 事务支持比较弱，只能保证事务中的每个操作连续执行。</li>
+<li>Redis 支持多种类型的数据类型</li>
+<li>Redis 常用于数据量较小的高性能操作和运算上</li>
+<li>memcache 用于在动态系统中减少数据库负载，提升性能；适合做缓存，提升性能</li>
+</ul>
+<h4 id="6-其他数据缓存"><a href="#6-其他数据缓存" class="headerlink" title="6. 其他数据缓存"></a>6. 其他数据缓存</h4><p>Session：尽量存到 memcache 或 Redis 里</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag"># 高并发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-7-%E5%8A%A8%E6%80%81%E8%AF%AD%E8%A8%80%E7%9A%84%E5%B9%B6%E5%8F%91%E5%A4%84%E7%90%86/" rel="prev" title="高并发大流量解决方案 7  动态语言的并发处理">
+      <i class="fa fa-chevron-left"></i> 高并发大流量解决方案 7  动态语言的并发处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-9-%E6%95%B0%E6%8D%AE%E5%B1%82%E7%9A%84%E4%BC%98%E5%8C%96/" rel="next" title="高并发大流量解决方案 9 数据层的优化">
+      高并发大流量解决方案 9 数据层的优化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98%E5%B1%82%E4%BC%98%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">数据库缓存层优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.</span> <span class="nav-text">1. 什么是数据库缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98"><span class="nav-number">1.2.</span> <span class="nav-text">2. 为什么要使用数据库缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8-MySQL-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-number">1.3.</span> <span class="nav-text">3. 使用 MySQL 查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%90%AF%E7%94%A8-MySQL-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 启用 MySQL 查询缓存</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8-memcache-%E7%BC%93%E5%AD%98"><span class="nav-number">1.4.</span> <span class="nav-text">4. 使用 memcache 缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8-Redis-%E7%BC%93%E5%AD%98"><span class="nav-number">1.5.</span> <span class="nav-text">5. 使用 Redis 缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E7%BC%93%E5%AD%98"><span class="nav-number">1.6.</span> <span class="nav-text">6. 其他数据缓存</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

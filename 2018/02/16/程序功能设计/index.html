@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="真题：编写一个在线留言本，实现用户的在线留言功能，留言信息存储到数据库，要求设计数据表内容以及使用 PHP 编码完成。  考点：  数据表设计 数据表创建语句 PHP 连接数据库的方式 编码能力">
+<meta property="og:type" content="article">
+<meta property="og:title" content="程序功能设计">
+<meta property="og:url" content="http://zouzhipeng.com/2018/02/16/%E7%A8%8B%E5%BA%8F%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="真题：编写一个在线留言本，实现用户的在线留言功能，留言信息存储到数据库，要求设计数据表内容以及使用 PHP 编码完成。  考点：  数据表设计 数据表创建语句 PHP 连接数据库的方式 编码能力">
+<meta property="og:locale">
+<meta property="og:image" content="http://omp48p40q.bkt.clouddn.com/18-2-16/13030217.jpg">
+<meta property="article:published_time" content="2018-02-16T09:55:04.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.051Z">
+<meta property="article:author" content="邹志鹏">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://omp48p40q.bkt.clouddn.com/18-2-16/13030217.jpg">
+
+<link rel="canonical" href="http://zouzhipeng.com/2018/02/16/%E7%A8%8B%E5%BA%8F%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>程序功能设计 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2018/02/16/%E7%A8%8B%E5%BA%8F%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          程序功能设计
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-02-16 17:55:04" itemprop="dateCreated datePublished" datetime="2018-02-16T17:55:04+08:00">2018-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>真题：编写一个在线留言本，实现用户的在线留言功能，留言信息存储到数据库，要求设计数据表内容以及使用 PHP 编码完成。</p>
+</blockquote>
+<p>考点：</p>
+<ul>
+<li>数据表设计</li>
+<li>数据表创建语句</li>
+<li>PHP 连接数据库的方式</li>
+<li>编码能力</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="1-分析数据表结构"><a href="#1-分析数据表结构" class="headerlink" title="1. 分析数据表结构"></a>1. 分析数据表结构</h4><p>留言本有哪些信息需要存储</p>
+<p>留言信息： ID，留言标题，留言内容，留言时间，留言人</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE message (</span><br><span class="line">&#96;id&#96; INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,</span><br><span class="line">&#96;title&#96; VARCHAR(120) NOT NULL DEFAULT &#39;&#39;,</span><br><span class="line">&#96;content&#96; VARCHAR(255) NOT NULL DEFAULT &#39;&#39;,</span><br><span class="line">&#96;created_at&#96; INT NOT NULL DEFAULT 0,</span><br><span class="line">&#96;user_name&#96; VARCHAR(32) NOT NULL DEFAULT &#39;&#39;</span><br><span class="line">KEY message_user_name(user_name)</span><br><span class="line">) ENGINE&#x3D;InnoDB DEFAULT CHARSET&#x3D;utf8;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-PHP-连接数据库的方式"><a href="#2-PHP-连接数据库的方式" class="headerlink" title="2. PHP 连接数据库的方式"></a>2. PHP 连接数据库的方式</h4><ul>
+<li>PDO：可扩展性更好、支持预处理、面向对象。建议使用，扩展性好，之后切换其他数据库方便，方法完善</li>
+<li>MySQLi：只支持 MySQL 操作、支持预处理、面向对象和过程、效率更高</li>
+<li>mysql：只支持 MySQL 数据库，没有预处理的支持、面向过程</li>
+</ul>
+<p>PDO 的基本操作</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	<span class="comment">// 操作数据库的代码</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (PDOException $e) &#123;</span><br><span class="line">	<span class="keyword">echo</span> $e-&gt;getMessage();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>操作数据库的代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$pdo = <span class="keyword">new</span> PDO($dsn, $username, $password, $attr);</span><br><span class="line">$sql = <span class="string">&#x27;SELECT id, title, content FROM message where user_name=:user_name&#x27;</span>;</span><br><span class="line">$stmt = $pdo-&gt;prepare($sql);</span><br><span class="line">$stmt-&gt;execute([<span class="string">&#x27;:user_name&#x27;</span> =&gt; $user_name]);</span><br><span class="line">$result = $stmt-&gt;fetchAll(PDO::FETCH_ASSOC);</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-解题方法"><a href="#3-解题方法" class="headerlink" title="3. 解题方法"></a>3. 解题方法</h4><p>根据考题给出的功能，先分析应该存储哪些信息，设计好数据表，这一步很关键，如果编码时才发现设计有问题，会浪费大量的时间，基本没有时间改，所以要先设计好，然后根据设计好的数据表创建数据表语句，通常建议使用 PDO 来连接 MySQL，最终完成编码，所以一定要熟悉 PDO 的操作。</p>
+<p>示例</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	$dsn = <span class="string">&#x27;mysql:dbname=test;host=localhost&#x27;</span>;</span><br><span class="line">	$username = <span class="string">&#x27;test&#x27;</span>;</span><br><span class="line">	$password = <span class="string">&#x27;test&#x27;</span>;</span><br><span class="line">	$attr = [</span><br><span class="line">		PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION</span><br><span class="line">	];</span><br><span class="line">	$pdo = <span class="keyword">new</span> PDO($dsn, $username, $password, $attr);</span><br><span class="line">	$sql = <span class="string">&#x27;insert into message(title, content, created_at, user_name) values(:title, :content. :created_at, :user_name)&#x27;</span>;</span><br><span class="line">	$stmt = $pdo-&gt;prepare($sql);</span><br><span class="line">	$data = [</span><br><span class="line">		<span class="string">&#x27;:title&#x27;</span> =&gt; $title,</span><br><span class="line">		<span class="string">&#x27;:content&#x27;</span> =&gt; $content,</span><br><span class="line">		<span class="string">&#x27;:created_at&#x27;</span> =&gt; time(),</span><br><span class="line">		<span class="string">&#x27;user_name&#x27;</span> =&gt; $user_name</span><br><span class="line">	];</span><br><span class="line">	$stmt-&gt;execute($data);</span><br><span class="line">	$rows = $stmt-&gt;rowCount();</span><br><span class="line">	<span class="keyword">if</span> ($rows) &#123;</span><br><span class="line">		<span class="keyword">exit</span>(<span class="string">&#x27;执行成功&#x27;</span>);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">exit</span>(<span class="string">&#x27;执行失败&#x27;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (PDOException $e) &#123;</span><br><span class="line">	<span class="keyword">echo</span> $e-&gt;getMessage();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-真题：设计一个无限分类表"><a href="#4-真题：设计一个无限分类表" class="headerlink" title="4. 真题：设计一个无限分类表"></a>4. 真题：设计一个无限分类表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE message (</span><br><span class="line">&#96;id&#96; INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,</span><br><span class="line">&#96;title&#96; VARCHAR(120) NOT NULL DEFAULT &#39;&#39;,</span><br><span class="line">&#96;pid&#96; INT NOT NULL DEFAULT 0,</span><br><span class="line">&#96;path&#96; VARCHAR NOT NULL DEFAULT &#39;&#39;</span><br><span class="line">KEY message_user_name(user_name)</span><br><span class="line">) ENGINE&#x3D;InnoDB DEFAULT CHARSET&#x3D;utf8;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://omp48p40q.bkt.clouddn.com/18-2-16/13030217.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/02/15/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%A4%A7%E6%B5%81%E9%87%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-11-web-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%8C%E8%AF%B7%E6%B1%82%E5%88%86%E5%8F%91/" rel="prev" title="高并发大流量解决方案 11 web 服务器的负载均衡，请求分发">
+      <i class="fa fa-chevron-left"></i> 高并发大流量解决方案 11 web 服务器的负载均衡，请求分发
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/02/16/MVC-%E6%A1%86%E6%9E%B6%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" rel="next" title="MVC 框架工作原理">
+      MVC 框架工作原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%88%86%E6%9E%90%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">1. 分析数据表结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-PHP-%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">2. PHP 连接数据库的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%A7%A3%E9%A2%98%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">3. 解题方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E7%9C%9F%E9%A2%98%EF%BC%9A%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E6%97%A0%E9%99%90%E5%88%86%E7%B1%BB%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text">4. 真题：设计一个无限分类表</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

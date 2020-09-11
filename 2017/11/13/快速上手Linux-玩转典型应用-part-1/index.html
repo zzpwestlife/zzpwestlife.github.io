@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="慕课网 快速上手Linux 玩转典型应用 学习笔记  part-1 在线学习点这里">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速上手Linux 玩转典型应用 part-1">
+<meta property="og:url" content="http://zouzhipeng.com/2017/11/13/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8BLinux-%E7%8E%A9%E8%BD%AC%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-part-1/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="慕课网 快速上手Linux 玩转典型应用 学习笔记  part-1 在线学习点这里">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-13T15:54:17.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.049Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://zouzhipeng.com/2017/11/13/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8BLinux-%E7%8E%A9%E8%BD%AC%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-part-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>快速上手Linux 玩转典型应用 part-1 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2017/11/13/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8BLinux-%E7%8E%A9%E8%BD%AC%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8-part-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          快速上手Linux 玩转典型应用 part-1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-11-13 23:54:17" itemprop="dateCreated datePublished" datetime="2017-11-13T23:54:17+08:00">2017-11-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Liunx/" itemprop="url" rel="index"><span itemprop="name">Liunx</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>慕课网 <a target="_blank" rel="noopener" href="http://coding.imooc.com/learn/list/154.html">快速上手Linux 玩转典型应用</a> 学习笔记  part-1</p>
+<p><a target="_blank" rel="noopener" href="http://www.runoob.com/linux/linux-tutorial.html">在线学习点这里</a></p>
+<a id="more"></a>
+
+<h2 id="1-研发必须知道的-Linux-知识"><a href="#1-研发必须知道的-Linux-知识" class="headerlink" title="1. 研发必须知道的 Linux 知识"></a>1. 研发必须知道的 Linux 知识</h2><ul>
+<li>Linux 区分大小写</li>
+<li>一切皆文件</li>
+<li>文件名后缀只是为了便于识别，对系统没有任何意义</li>
+<li>云服务器与本地虚拟机的最主要区别就是云服务器有<strong>公网IP</strong></li>
+</ul>
+<h2 id="2-准备知识"><a href="#2-准备知识" class="headerlink" title="2. 准备知识"></a>2. 准备知识</h2><h3 id="1-查看-ip"><a href="#1-查看-ip" class="headerlink" title="1. 查看 ip"></a>1. 查看 ip</h3><h4 id="ifconfig-（最常用）"><a href="#ifconfig-（最常用）" class="headerlink" title="ifconfig （最常用）"></a>ifconfig （最常用）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[zzp@iZ2ze4kikm9076bxac1noqZ ~]$ ifconfig</span><br><span class="line">eth0: flags&#x3D;4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 172.17.147.89  netmask 255.255.240.0  broadcast 172.17.159.255</span><br><span class="line">        ether 00:16:3e:2e:0c:1e  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 14729288  bytes 2106329863 (1.9 GiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 9911393  bytes 8389800747 (7.8 GiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags&#x3D;73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        loop  txqueuelen 1  (Local Loopback)</span><br><span class="line">        RX packets 10772426  bytes 667897558 (636.9 MiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 10772426  bytes 667897558 (636.9 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
+
+<h4 id="ip-addr"><a href="#ip-addr" class="headerlink" title="ip addr"></a>ip addr</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[zzp@iZ2ze4kikm9076bxac1noqZ ~]$ ip addr</span><br><span class="line"># 本地回环ip</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN qlen 1</span><br><span class="line">    link&#x2F;loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1&#x2F;8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line"># 物理ip</span><br><span class="line">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000</span><br><span class="line">    link&#x2F;ether 00:16:3e:2e:0c:1e brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.147.89&#x2F;20 brd 172.17.159.255 scope global eth0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<h4 id="vi-ifcfg-xx"><a href="#vi-ifcfg-xx" class="headerlink" title="vi ifcfg-xx"></a>vi ifcfg-xx</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[zzp@iZ2ze4kikm9076bxac1noqZ ~]$ vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-xx</span><br><span class="line"># 这里 xx 就是 ip addr 获取到里的两个ip的名字， lo和eth0</span><br></pre></td></tr></table></figure>
+
+<p>修改 <code>ONBOOT=yes</code>， 并<code>service network restart</code>，对应的网络信息就可以在 <code>ip addr</code> 下显示。</p>
+<h4 id="yum-install-net-tools"><a href="#yum-install-net-tools" class="headerlink" title="yum install net-tools"></a>yum install net-tools</h4><p>安装完成后就可以使用ifconfig命令（minial 版的centOS阉割了此命令）</p>
+<h3 id="2-替换默认源（软件下载地址）"><a href="#2-替换默认源（软件下载地址）" class="headerlink" title="2. 替换默认源（软件下载地址）"></a>2. 替换默认源（软件下载地址）</h3><p>操作方法见此<a target="_blank" rel="noopener" href="http://mirrors.163.com/.help/centos.html">地址</a></p>
+<h3 id="3-安装-vim"><a href="#3-安装-vim" class="headerlink" title="3. 安装 vim"></a>3. 安装 vim</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install vim</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-远程服务管理工具ssh-（重点）"><a href="#3-远程服务管理工具ssh-（重点）" class="headerlink" title="3. 远程服务管理工具ssh （重点）"></a>3. 远程服务管理工具ssh （重点）</h2><p>Secure Shell 安全外壳协议，建立在应用层基础上的安全协议。</p>
+<p>可靠，专为远程登录会话和其他网络服务提供安全性的协议。</p>
+<h3 id="1-安装-ssh-服务"><a href="#1-安装-ssh-服务" class="headerlink" title="1. 安装 ssh 服务"></a>1. 安装 ssh 服务</h3><p>服务器端一般默认已安装了ssh服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install openssh-server</span><br></pre></td></tr></table></figure>
+<h3 id="2-启动-ssh"><a href="#2-启动-ssh" class="headerlink" title="2. 启动 ssh"></a>2. 启动 ssh</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service sshd start</span><br><span class="line">ps -ef | grep ssh</span><br></pre></td></tr></table></figure>
+<h3 id="3-设置开机启动"><a href="#3-设置开机启动" class="headerlink" title="3. 设置开机启动"></a>3. 设置开机启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig sshd on</span><br></pre></td></tr></table></figure>
+
+<p>客户端安装 ssh 工具</p>
+<p>Win:Xshell, Putty, secureCRT 等，<br>Linux: <code>yum install openssh-clients</code></p>
+<p>连接：<br><code>ssh zzp@47.93.234.60 -p 8222</code></p>
+<h3 id="4-ssh-config-命令"><a href="#4-ssh-config-命令" class="headerlink" title="4. ssh config 命令"></a>4. ssh config 命令</h3><ul>
+<li>为了方便批量管理多个ssh</li>
+<li>存放在 ~/.ssh/config</li>
+</ul>
+<p>config 语法：</p>
+<ol>
+<li>Host: 别名</li>
+<li>HostName: 主机名或ip</li>
+<li>Port: 端口 默认 22</li>
+<li>User: 用户名</li>
+<li>IdentityFile: 密钥文件路径</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@iz2ze4kikm9076bxac1noqz ~]# cd .ssh&#x2F;</span><br><span class="line">[root@iz2ze4kikm9076bxac1noqz .ssh]# ll</span><br><span class="line">total 4</span><br><span class="line">-rw------- 1 root root 403 May 24 15:20 authorized_keys</span><br><span class="line">[root@iz2ze4kikm9076bxac1noqz .ssh]# touch config</span><br></pre></td></tr></table></figure>
+<h3 id="5-免密登录-ssh-key"><a href="#5-免密登录-ssh-key" class="headerlink" title="5. 免密登录 ssh key"></a>5. 免密登录 ssh key</h3><p>使用非对称加密方式生成公钥和私钥，私钥存放在本地 ~/.ssh，保护好私钥，公钥可以对外公开，放在服务器的 ~/.ssh/authorized_keys</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">ssh-keygen -t dsa</span><br></pre></td></tr></table></figure>
+
+<p>需要加载私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add ~&#x2F;.ssh&#x2F;private_key</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-iTerm-中配置免密登录-sshpass"><a href="#5-iTerm-中配置免密登录-sshpass" class="headerlink" title="5. iTerm 中配置免密登录 sshpass"></a>5. <a target="_blank" rel="noopener" href="http://www.cnblogs.com/onlyfu/p/4460160.html">iTerm 中配置免密登录 sshpass</a></h3><p>我的配置大概下面这个样子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;bin&#x2F;sshpass  -f &#x2F;zzp&#x2F;sshpass&#x2F;my_aliyun_pass ssh zzp@47.93.234.60 -p 8222</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>/zzp/sshpass/my_aliyun_pass</code> 文件中存储的是登录密码，设置好快捷键后就可以实现一键免密登录。</p>
+<h3 id="6-端口安全"><a href="#6-端口安全" class="headerlink" title="6. 端口安全"></a>6. 端口安全</h3><p>改变默认服务器端口，修改 <code>/etc/ssh/sshd_config</code> 文件，大概十几行， Port 12345，并且可以同时监听多个端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Port 12345</span><br><span class="line">Port 10086</span><br><span class="line">Port 10010</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Liunx-常用命令"><a href="#4-Liunx-常用命令" class="headerlink" title="4. Liunx 常用命令"></a>4. Liunx 常用命令</h2><h3 id="1-软件操作命令"><a href="#1-软件操作命令" class="headerlink" title="1. 软件操作命令"></a>1. 软件操作命令</h3><p>软件包管理器 yum</p>
+<ul>
+<li>安装软件 <code>yum install xxx</code></li>
+<li>卸载软件 <code>yum remove xxx</code></li>
+<li>搜索软件 <code>yum search xxx</code></li>
+<li>清理缓存 <code>yum clean packages</code></li>
+<li>列出已安装 <code>yum list</code> 会列出很多，最好grep一下</li>
+<li>软件包信息 <code>yum info xxx</code></li>
+</ul>
+<h3 id="2-服务器硬件资源信息"><a href="#2-服务器硬件资源信息" class="headerlink" title="2. 服务器硬件资源信息"></a>2. 服务器硬件资源信息</h3><ul>
+<li>内存 <code>free -m</code></li>
+<li>硬盘 <code>df -h</code></li>
+<li>负载 <code>w/top</code></li>
+<li>cpu 个数和核数 <code>cat /proc/cpuinfo</code></li>
+</ul>
+<p>1分钟，5分钟，15分钟的平均负载，一般大于0.6或0.7为危险</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ w</span><br><span class="line">21:13:30 up 1 day, 20:22,  1 user,  load average: 0.00, 0.03, 0.05</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">zzp      pts&#x2F;0    123.122.85.229   21:05    2.00s  0.00s  0.00s w</span><br></pre></td></tr></table></figure>
+
+<p>fdisk 可视化磁盘</p>
+<h3 id="3-文件操作命令"><a href="#3-文件操作命令" class="headerlink" title="3. 文件操作命令"></a>3. 文件操作命令</h3><p>文件目录结构</p>
+<ul>
+<li>根目录 /</li>
+<li>家目录 /home</li>
+<li>临时目录 /tmp</li>
+<li>配置目录 /etc</li>
+<li>用户程序目录 /usr</li>
+</ul>
+<p>文件操作</p>
+<ul>
+<li>查看目录下的文件 ls/ll/ll -ah</li>
+<li>新建文件 touch</li>
+<li>新建文件夹 mkdir (mkdir -p dir1/dir2/dir3/dir4)</li>
+<li>进入目录 cd</li>
+<li>删除文件和目录 rm</li>
+<li>复制 cp</li>
+<li>移动 mv</li>
+<li>显示当前路径 pwd (print working directory)</li>
+</ul>
+<h3 id="4-Vim"><a href="#4-Vim" class="headerlink" title="4. Vim"></a>4. Vim</h3><ul>
+<li>首行 gg</li>
+<li>末行 G</li>
+<li>行尾 $</li>
+<li>删除 dd</li>
+<li>恢复 u</li>
+<li>复制 yy</li>
+<li>粘贴 p </li>
+</ul>
+<h3 id="5-文件搜索、查找、读取"><a href="#5-文件搜索、查找、读取" class="headerlink" title="5. 文件搜索、查找、读取"></a>5. 文件搜索、查找、读取</h3><ul>
+<li>从文件尾部开始读 tail 通常加 -f</li>
+<li>从文件头部开始读 head</li>
+<li>读取整个文件 cat 注意大文件，不要随意读</li>
+<li>分页读取 more 从头部开始读</li>
+<li>可控分页 less </li>
+<li>搜索关键字 grep  (grep -n “error” filename)</li>
+<li>查找文件 find</li>
+<li>统计个数 wc (cat filename | wc -l)  wordcount</li>
+</ul>
+<p><code>grep &quot;2017-11-11&quot; filename | more</code></p>
+<p><code>find . -name &quot;*.conf&quot;</code> 在当前目录及其子目录下查找名称以.conf结尾的文件</p>
+<p><code>find . -type f</code> 在当前目录及其子目录下查找类型为文件的文件</p>
+<p><code>find . -type d</code> 在当前目录及其子目录下查找类型为目录的文件</p>
+<p><code>find . -ctime -20</code> 在当前目录及其子目录下查找所有最近20天内更新过的文件</p>
+<p><code>find /var/log -type f -mtime +7 -exec rm &#123;&#125;; \</code> 在/var/log下查找所有7天以前更新过的文件，删除</p>
+<p><code>find . -type f -perm 644 -exec ls -al &#123;&#125; \;</code></p>
+<h3 id="6-文件解压缩"><a href="#6-文件解压缩" class="headerlink" title="6. 文件解压缩"></a>6. 文件解压缩</h3><p><code>tar -cf des.tar source</code> create compressed file from source to des</p>
+<p><code>tar -tvf file.tar</code> list files in the compressed file</p>
+<p><code>tar -xf file.tar</code> extract file from the compressed file</p>
+<p><code>tar -czvf des.tar.gz source</code>  in .gz format, visualized, -f usually is the last param</p>
+<p><code>tar -xzvf file.tar.gz</code></p>
+<p>记住每个参数的意思</p>
+<h3 id="7-系统用户操作命令"><a href="#7-系统用户操作命令" class="headerlink" title="7. 系统用户操作命令"></a>7. 系统用户操作命令</h3><ul>
+<li>useradd</li>
+<li>adduser</li>
+<li>userdel</li>
+<li>passwd</li>
+</ul>
+<blockquote>
+<p>useradd is native binary compiled with the system. But, adduser is a perl script which uses useradd binary in back-end.<br>adduser is more user friendly and interactive than its back-end useradd. There’s no difference in features provided.</p>
+</blockquote>
+<h3 id="8-防火墙的设置"><a href="#8-防火墙的设置" class="headerlink" title="8. 防火墙的设置"></a>8. 防火墙的设置</h3><p>保护服务器安全</p>
+<p>确认服务是否已安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># yum list | grep firewall</span><br><span class="line">firewalld.noarch                        0.4.4.4-6.el7                  @base</span><br><span class="line">firewalld-filesystem.noarch             0.4.4.4-6.el7                  @base</span><br><span class="line">python-firewall.noarch                  0.4.4.4-6.el7                  @base</span><br><span class="line">fail2ban-firewalld.noarch               0.9.7-1.el7                    epel</span><br><span class="line">firewall-applet.noarch                  0.4.4.4-6.el7                  base</span><br><span class="line">firewall-config.noarch                  0.4.4.4-6.el7                  base</span><br><span class="line">puppet-firewalld.noarch                 0.1.3-1.el7                    epel</span><br><span class="line">system-config-firewall.noarch           1.2.29-10.el7                  base</span><br><span class="line">system-config-firewall-base.noarch      1.2.29-10.el7                  base</span><br><span class="line">system-config-firewall-tui.noarch       1.2.29-10.el7                  base</span><br></pre></td></tr></table></figure>
+
+<p>确认服务是否已启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># ps -ef | grep firewall</span><br><span class="line">root     19678 19531  0 22:45 pts&#x2F;1    00:00:00 grep --color&#x3D;auto firewall</span><br></pre></td></tr></table></figure>
+
+<p>安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># yum install firewalld</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ service firewalld start</span><br><span class="line">Redirecting to &#x2F;bin&#x2F;systemctl start  firewalld.service</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D; AUTHENTICATING FOR org.freedesktop.systemd1.manage-units &#x3D;&#x3D;&#x3D;</span><br><span class="line">Authentication is required to manage system services or units.</span><br><span class="line">Authenticating as: root</span><br><span class="line">Password:</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D; AUTHENTICATION COMPLETE &#x3D;&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>检查状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># service firewalld status</span><br><span class="line">Redirecting to &#x2F;bin&#x2F;systemctl status  firewalld.service</span><br><span class="line">● firewalld.service</span><br><span class="line">   Loaded: masked (&#x2F;dev&#x2F;null; bad)</span><br><span class="line">   Active: inactive (dead)</span><br></pre></td></tr></table></figure>
+
+<p>关闭或禁用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># service firewalld stop&#x2F;disable</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --version</span><br><span class="line">firewall-cmd --state</span><br><span class="line">firewall-cmd --get-zones</span><br><span class="line">firewall-cmd --get-default-zone</span><br><span class="line">firewall-cmd --list-all-zone</span><br><span class="line">firewall-cmd --zone&#x3D;public</span><br><span class="line">firewall-cmd --list-ports</span><br><span class="line">firewall-cmd --query-service&#x3D;ssh</span><br><span class="line">firewall-cmd --remove-service&#x3D;ssh</span><br><span class="line">firewall-cmd --add-service&#x3D;ssh</span><br><span class="line">firewall-cmd --list-services</span><br><span class="line">firewall-cmd --query-port&#x3D;22&#x2F;tcp</span><br><span class="line">firewall-cmd --add-port&#x3D;22&#x2F;tcp</span><br><span class="line">firewall-cmd --remove-port&#x3D;22&#x2F;tcp</span><br><span class="line">firewall-cmd --list-ports</span><br><span class="line">firewall-cmd --get-all-zones</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-提权和文件上传下载"><a href="#9-提权和文件上传下载" class="headerlink" title="9. 提权和文件上传下载"></a>9. 提权和文件上传下载</h3><ul>
+<li>提权 sudo</li>
+<li>下载 wget, curl</li>
+<li>上传 scp</li>
+</ul>
+<p>secureCRT + lrzsz</p>
+<h4 id="1-提权"><a href="#1-提权" class="headerlink" title="1. 提权"></a>1. 提权</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">visudo</span><br></pre></td></tr></table></figure>
+<p>找到 Allows people in group wheel to run all commands</p>
+<p>添加一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%user ALL&#x3D;(ALL)  ALL</span><br></pre></td></tr></table></figure>
+<p>将用户添加到提权账号中</p>
+<p>尽量不要使用root 账号进行操作。</p>
+<h4 id="2-下载"><a href="#2-下载" class="headerlink" title="2. 下载"></a>2. 下载</h4><p>一般使用 wget 就可以了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># wget http:&#x2F;&#x2F;www.baidu.com&#x2F;</span><br><span class="line">--2017-11-13 23:33:40--  http:&#x2F;&#x2F;www.baidu.com&#x2F;</span><br><span class="line">Resolving www.baidu.com (www.baidu.com)... 115.239.210.27, 115.239.211.112</span><br><span class="line">Connecting to www.baidu.com (www.baidu.com)|115.239.210.27|:80... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 2381 (2.3K) [text&#x2F;html]</span><br><span class="line">Saving to: ‘index.html’</span><br><span class="line"></span><br><span class="line">100%[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;] 2,381       --.-K&#x2F;s   in 0s</span><br><span class="line"></span><br><span class="line">2017-11-13 23:33:40 (260 MB&#x2F;s) - ‘index.html’ saved [2381&#x2F;2381]</span><br><span class="line"></span><br><span class="line">[root@iz2ze4kikm9076bxac1noqz ~]# ll</span><br><span class="line">-rw-r--r--  1 root root     2381 Jan 23  2017 index.html</span><br><span class="line"></span><br><span class="line"># curl -o baidu.html http:&#x2F;&#x2F;www.baidu.com</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">100  2381  100  2381    0     0   3918      0 --:--:-- --:--:-- --:--:--  3922</span><br><span class="line">[root@iz2ze4kikm9076bxac1noqz ~]# ll</span><br><span class="line">-rw-r--r--  1 root root     2381 Nov 13 23:34 baidu.html</span><br><span class="line">-rw-r--r--  1 root root     2381 Jan 23  2017 index.html</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-上传"><a href="#3-上传" class="headerlink" title="3. 上传"></a>3. 上传</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp file root@192.168.1.1:&#x2F;dir&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>下载到本地</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp root@192.168.1.1:&#x2F;dir&#x2F;file locate_dir</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/10/08/%E3%80%90%E8%AE%B0%E5%BD%95%E3%80%91%E6%9C%80%E8%BF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E/" rel="prev" title="【记录】最近的一些琐碎 trivia 201710">
+      <i class="fa fa-chevron-left"></i> 【记录】最近的一些琐碎 trivia 201710
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/11/18/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8-wangEditor-%E6%8E%A5%E5%85%A5%E6%96%B9%E6%B3%95/" rel="next" title="富文本编辑器 wangEditor 接入方法">
+      富文本编辑器 wangEditor 接入方法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%A0%94%E5%8F%91%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84-Linux-%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">1. 研发必须知道的 Linux 知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%87%86%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-number">2.</span> <span class="nav-text">2. 准备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E7%9C%8B-ip"><span class="nav-number">2.1.</span> <span class="nav-text">1. 查看 ip</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ifconfig-%EF%BC%88%E6%9C%80%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="nav-number">2.1.1.</span> <span class="nav-text">ifconfig （最常用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ip-addr"><span class="nav-number">2.1.2.</span> <span class="nav-text">ip addr</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vi-ifcfg-xx"><span class="nav-number">2.1.3.</span> <span class="nav-text">vi ifcfg-xx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#yum-install-net-tools"><span class="nav-number">2.1.4.</span> <span class="nav-text">yum install net-tools</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9B%BF%E6%8D%A2%E9%BB%98%E8%AE%A4%E6%BA%90%EF%BC%88%E8%BD%AF%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%9C%B0%E5%9D%80%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">2. 替换默认源（软件下载地址）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85-vim"><span class="nav-number">2.3.</span> <span class="nav-text">3. 安装 vim</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7ssh-%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">3. 远程服务管理工具ssh （重点）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85-ssh-%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.1.</span> <span class="nav-text">1. 安装 ssh 服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%90%AF%E5%8A%A8-ssh"><span class="nav-number">3.2.</span> <span class="nav-text">2. 启动 ssh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8"><span class="nav-number">3.3.</span> <span class="nav-text">3. 设置开机启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-ssh-config-%E5%91%BD%E4%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">4. ssh config 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95-ssh-key"><span class="nav-number">3.5.</span> <span class="nav-text">5. 免密登录 ssh key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-iTerm-%E4%B8%AD%E9%85%8D%E7%BD%AE%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95-sshpass"><span class="nav-number">3.6.</span> <span class="nav-text">5. iTerm 中配置免密登录 sshpass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E7%AB%AF%E5%8F%A3%E5%AE%89%E5%85%A8"><span class="nav-number">3.7.</span> <span class="nav-text">6. 端口安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Liunx-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">4.</span> <span class="nav-text">4. Liunx 常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%BD%AF%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-number">4.1.</span> <span class="nav-text">1. 软件操作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A1%AC%E4%BB%B6%E8%B5%84%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="nav-number">4.2.</span> <span class="nav-text">2. 服务器硬件资源信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-number">4.3.</span> <span class="nav-text">3. 文件操作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Vim"><span class="nav-number">4.4.</span> <span class="nav-text">4. Vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E8%AF%BB%E5%8F%96"><span class="nav-number">4.5.</span> <span class="nav-text">5. 文件搜索、查找、读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%96%87%E4%BB%B6%E8%A7%A3%E5%8E%8B%E7%BC%A9"><span class="nav-number">4.6.</span> <span class="nav-text">6. 文件解压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-number">4.7.</span> <span class="nav-text">7. 系统用户操作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E9%98%B2%E7%81%AB%E5%A2%99%E7%9A%84%E8%AE%BE%E7%BD%AE"><span class="nav-number">4.8.</span> <span class="nav-text">8. 防火墙的设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E6%8F%90%E6%9D%83%E5%92%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8B%E8%BD%BD"><span class="nav-number">4.9.</span> <span class="nav-text">9. 提权和文件上传下载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%8F%90%E6%9D%83"><span class="nav-number">4.9.1.</span> <span class="nav-text">1. 提权</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%B8%8B%E8%BD%BD"><span class="nav-number">4.9.2.</span> <span class="nav-text">2. 下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E4%B8%8A%E4%BC%A0"><span class="nav-number">4.9.3.</span> <span class="nav-text">3. 上传</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zouzhipeng.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. Laravel1. TokenMismatchException in VerifyCsrfToken.php这个问题很常见，在html中添加 csrf_token 也无效的话，考虑以下解决方法： 12sudo rm -rf storage&#x2F;framework&#x2F;sessions&#x2F;*sudo php artisan cache:clear">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最近遇到的一些小问题 201711">
+<meta property="og:url" content="http://zouzhipeng.com/2017/11/28/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98-201711/index.html">
+<meta property="og:site_name" content="邹志鹏&#39;s blog">
+<meta property="og:description" content="1. Laravel1. TokenMismatchException in VerifyCsrfToken.php这个问题很常见，在html中添加 csrf_token 也无效的话，考虑以下解决方法： 12sudo rm -rf storage&#x2F;framework&#x2F;sessions&#x2F;*sudo php artisan cache:clear">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-28T09:01:02.000Z">
+<meta property="article:modified_time" content="2020-09-11T01:04:35.050Z">
+<meta property="article:author" content="邹志鹏">
+<meta property="article:tag" content="trivia">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://zouzhipeng.com/2017/11/28/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98-201711/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>最近遇到的一些小问题 201711 | 邹志鹏's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">邹志鹏's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to the real world! It sucks. You are gonna love it.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://zouzhipeng.com/2017/11/28/%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98-201711/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="邹志鹏">
+      <meta itemprop="description" content="Yesterday you said tomorrow.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="邹志鹏's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最近遇到的一些小问题 201711
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-11-28 17:01:02" itemprop="dateCreated datePublished" datetime="2017-11-28T17:01:02+08:00">2017-11-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-11 09:04:35" itemprop="dateModified" datetime="2020-09-11T09:04:35+08:00">2020-09-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/trivia/" itemprop="url" rel="index"><span itemprop="name">trivia</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-Laravel"><a href="#1-Laravel" class="headerlink" title="1. Laravel"></a>1. Laravel</h2><h3 id="1-TokenMismatchException-in-VerifyCsrfToken-php"><a href="#1-TokenMismatchException-in-VerifyCsrfToken-php" class="headerlink" title="1. TokenMismatchException in VerifyCsrfToken.php"></a>1. TokenMismatchException in VerifyCsrfToken.php</h3><p>这个问题很常见，在html中添加 csrf_token 也无效的话，考虑以下解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf storage&#x2F;framework&#x2F;sessions&#x2F;*</span><br><span class="line">sudo php artisan cache:clear</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h3 id="2-Tinker"><a href="#2-Tinker" class="headerlink" title="2. Tinker"></a>2. Tinker</h3><p>database/factories/ModelFactory 里的写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$factory-&gt;define(App\User::class, function (Faker\Generator $faker) &#123;</span><br><span class="line">    static $password;</span><br><span class="line"></span><br><span class="line">    return [</span><br><span class="line">        &#39;name&#39; &#x3D;&gt; $faker-&gt;name,</span><br><span class="line">        &#39;email&#39; &#x3D;&gt; $faker-&gt;unique()-&gt;safeEmail,</span><br><span class="line">        &#39;mobile&#39; &#x3D;&gt; $faker-&gt;phoneNumber,</span><br><span class="line">        &#39;password&#39; &#x3D;&gt; $password ?: $password &#x3D; bcrypt(&#39;secret&#39;),</span><br><span class="line">        &#39;remember_token&#39; &#x3D;&gt; str_random(10),</span><br><span class="line">        &#39;forum_id&#39; &#x3D;&gt; function () &#123;</span><br><span class="line">            return factory(\App\Forum::class)-&gt;create()-&gt;id;</span><br><span class="line">        &#125;,</span><br><span class="line">    ];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php artisan tinker </span><br><span class="line">factory(App\User::class, 10)-&gt;create();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：修改代码后需退出再重新进</p>
+</blockquote>
+<h2 id="2-Mysql"><a href="#2-Mysql" class="headerlink" title="2. Mysql"></a>2. Mysql</h2><h3 id="1-重置表格索引"><a href="#1-重置表格索引" class="headerlink" title="1. 重置表格索引"></a>1. 重置表格索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table &#96;files&#96; auto_increment&#x3D;1 </span><br></pre></td></tr></table></figure>
+
+<h3 id="2-mysql-选择出多个字段，按其中某个字段distinct"><a href="#2-mysql-选择出多个字段，按其中某个字段distinct" class="headerlink" title="2. mysql 选择出多个字段，按其中某个字段distinct"></a>2. mysql 选择出多个字段，按其中某个字段distinct</h3><p>要通过count 和 group的组合来实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select DISTINCT field_name, other_field_name_1, other_field_name_2, ... ,other_field_name_n, count(field_name) from table_name where where_conditions group by field_name</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-月份实现"><a href="#3-月份实现" class="headerlink" title="3. 月份实现"></a>3. 月份实现</h3><p>datediff 函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select round(datediff(date1, date2)&#x2F;30) from table_name;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-正则"><a href="#4-正则" class="headerlink" title="4.正则"></a>4.正则</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from acct_member where email regexp &#39;^[0-9]&#123;11&#125;@virtualAccount.com$&#39; limit 10</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：\d 等在mysql不好用，替换成别的，如[0-9]+</p>
+</blockquote>
+<h3 id="5-mysql-连表更新数据"><a href="#5-mysql-连表更新数据" class="headerlink" title="5. mysql 连表更新数据"></a>5. mysql 连表更新数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">UPDATE  p_order_article p</span><br><span class="line">LEFT JOIN</span><br><span class="line">        acct_member a</span><br><span class="line">ON      p.username &#x3D; a.email</span><br><span class="line">SET     p.user_id &#x3D; a.uid</span><br><span class="line">WHERE  a.email&lt;&gt;&#39;&#39; and p.user_id&#x3D;0</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-前端"><a href="#3-前端" class="headerlink" title="3. 前端"></a>3. 前端</h2><h3 id="1-jquery-validation-验证-select-下拉框"><a href="#1-jquery-validation-验证-select-下拉框" class="headerlink" title="1. jquery-validation 验证 select 下拉框"></a>1. jquery-validation 验证 select 下拉框</h3><p>需要使用自定义方法，<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/241145/jquery-validate-plugin-how-to-create-a-simple-custom-rule">网址</a></p>
+<h3 id="2-textarea"><a href="#2-textarea" class="headerlink" title="2. textarea"></a>2. textarea</h3><p>在使用表单中的textarea标签时，有以下需要注意的地方：</p>
+<ul>
+<li><p>去掉右侧滚动条：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;textarea  style&#x3D; &quot;overflow:hidden;&quot;&gt; &lt;&#x2F;textarea&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>去掉右下角的拖拽标记：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;textarea  style&#x3D; &quot;resize:none;&quot;&gt; &lt;&#x2F;textarea&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>textarea文本域宽度和高度（width、height）自动适应变化处理</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 控制宽度的自动适应 --&gt;</span><br><span class="line">&lt;style type&#x3D;&quot;text&#x2F;css&quot;&gt;</span><br><span class="line">.comments &#123;</span><br><span class="line"> width:100%;&#x2F;*自动适应父布局宽度*&#x2F;</span><br><span class="line"> overflow:auto;</span><br><span class="line"> word-break:break-all;&#x2F;*在ie中解决断行问题(防止自动变为在一行显示，主要解决ie兼容问题，ie8中当设宽度为100%时，文本域类容超过一行时，当我们双击文本内容就会自动变为一行显示，所以只能用ie的专有断行属性“word-break或word-wrap”控制其断行)*&#x2F;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 主要控制高度的自动适应 --&gt;</span><br><span class="line">&lt;!-- 第一个是普通textarea --&gt;</span><br><span class="line">&lt;textarea class&#x3D;&quot;comments&quot; rows&#x3D;&quot;10&quot; cols&#x3D;&quot;10&quot;&gt; &lt;&#x2F;textarea&gt;</span><br><span class="line">&lt;!-- 以下两种方式都可以解决textarea行高自动适应类容的高度 --&gt;</span><br><span class="line">&lt;textarea class&#x3D;&quot;comments&quot; rows&#x3D;1   name&#x3D;s1   cols&#x3D;27   onpropertychange&#x3D; &quot;this.style.posHeight&#x3D;this.scrollHeight &quot;&gt;&lt;&#x2F;textarea&gt;</span><br><span class="line"></span><br><span class="line">&lt;textarea class&#x3D;&quot;comments&quot; style&#x3D;&quot;height:expression((this.scrollHeight&gt;150)?&#39;150px&#39;:(this.scrollHeight+5)+&#39;px&#39;);overflow:auto;&quot;&gt;&lt;&#x2F;textarea&gt; </span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Linux-amp-PHP"><a href="#4-Linux-amp-PHP" class="headerlink" title="4. Linux &amp; PHP"></a>4. Linux &amp; PHP</h2><h3 id="1-查找大文件"><a href="#1-查找大文件" class="headerlink" title="1. 查找大文件"></a>1. 查找大文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find .&#x2F; -size +100M -exec ls -lh &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>如果想直接删除大于50M的文件，使用命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find .&#x2F; -size +50M -exec rm &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>本目录下文件大小排序并取前十个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -lSh | head -10</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://teakki.com/p/57dbcd8f57cd1ab2139a72d3">这里</a>有详细的教程和案例。</p>
+</li>
+</ul>
+<h3 id="2-PHP的-file-exists-is-dir-is-file"><a href="#2-PHP的-file-exists-is-dir-is-file" class="headerlink" title="2. PHP的 file_exists = is_dir + is_file"></a>2. PHP的 <code>file_exists = is_dir + is_file</code></h3><p>它既可以判断文件是否存在，又可以判断目录是否存在。但这样一个全面的函数执行效率非常低，就像asp中request不指定是form，还是get,cookies，所以结论是：</p>
+<ul>
+<li>如果要判断目录是否存在，请用独立函数 is_dir(directory)</li>
+<li>如果要判断文件是否存在，请用独立函数 is_file(filepath)</li>
+</ul>
+<p>is_file 只判断文件是否存在；<br>file_exists 判断文件是否存在或者是目录是否存在；<br>is_dir 判断目录是否存在；</p>
+<p>查看手册，虽然这两个函数的结果都会被缓存，但是is_file却快了N倍。<br>还有一个值得注意的：<br>文件存在的情况下，is_file比file_exists要快N倍；<br>文件不存在的情况下，is_file比file_exists要慢；<br>结论是，file_exits函数并不会因为该文件是否真的存在而影响速度，但是is_file影响就大了。</p>
+<h3 id="3-Laravel-使用-model-方式取数据，标记为-deleted-at-的记录也取出来了，如何避免"><a href="#3-Laravel-使用-model-方式取数据，标记为-deleted-at-的记录也取出来了，如何避免" class="headerlink" title="3. Laravel 使用 model 方式取数据，标记为 deleted_at 的记录也取出来了，如何避免"></a>3. Laravel 使用 model 方式取数据，标记为 deleted_at 的记录也取出来了，如何避免</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App;</span><br><span class="line">use Illuminate\Database\Eloquent\Model as EloquentModel;</span><br><span class="line">use Illuminate\Database\Eloquent\SoftDeletes;</span><br><span class="line">class Model extends EloquentModel</span><br><span class="line">    public function __construct()</span><br><span class="line">    &#123;</span><br><span class="line">        parent::__construct();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>加入 <code>parent::__contstruct()</code>， 就可以了<br>这就带来一个问题， 每个Model 的 fillable 字段都要填一遍了<br>老老实实写 fillable吧 ，为了安全<br>其实删掉 construct 就好了，怪了（有待确认）</p>
+<h3 id="4-修改php文件上传2M的限制"><a href="#4-修改php文件上传2M的限制" class="headerlink" title="4. 修改php文件上传2M的限制"></a>4. 修改php文件上传2M的限制</h3><p>首先找到当前使用的PHP配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">which php.ini is being used</span><br><span class="line">php -i|grep &#39;php.ini&#39;</span><br></pre></td></tr></table></figure>
+
+<p>实践证明，这种方法不靠谱，最好的方法还是在页面中打印出 <code>phpinfo()</code>， 找到 <code>Loaded Configuration File</code> 即可</p>
+<p>修改这几个参数，重启 php-fpm （<code>service php-fpm restart</code>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upload_max_filesize &#x3D; 100M     (php程序最大可以上传的附件值)</span><br><span class="line">post_max_size &#x3D; 100M           (form表单POST类型上传的最大可以上传值)</span><br><span class="line">memory_limit &#x3D; 128M　          (限制php程序运行时占用的内存大小最大为 128M)</span><br><span class="line">max_execution_time &#x3D; 0　    (PHP程序执行时间，单位：秒 0代表不限制)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-could-not-find-driver"><a href="#5-could-not-find-driver" class="headerlink" title="5. could not find driver"></a>5. could not find driver</h3><p>网页请求没有问题，而命令行中执行composer 或 artisan 都报这个错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Illuminate\Database\QueryException]</span><br><span class="line"> could not find driver</span><br></pre></td></tr></table></figure>
+<p>这个问题困扰了好几天<br>服务器装了多个PHP， 命令行 <code>php -v</code>  和网页 <code>phpinfo()</code> 输出的PHP版本竟然不一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># which php</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;bin&#x2F;php</span><br><span class="line"></span><br><span class="line"># &#x2F;usr&#x2F;local&#x2F;bin&#x2F;php -r &quot;phpinfo();&quot; | grep &quot;PHP Version&quot;</span><br><span class="line">PHP Version &#x3D;&gt; 7.1.9</span><br><span class="line">PHP Version &#x3D;&gt; 7.1.9</span><br><span class="line"></span><br><span class="line"># php -v</span><br><span class="line">PHP 7.1.9 (cli) (built: Sep  8 2017 10:52:57) ( NTS )</span><br><span class="line">Copyright (c) 1997-2017 The PHP Group</span><br><span class="line">Zend Engine v3.1.0, Copyright (c) 1998-2017 Zend Technologies</span><br><span class="line"></span><br><span class="line"># &#x2F;usr&#x2F;local&#x2F;bin&#x2F;php -r &quot;echo(PHP_BINDIR);&quot;</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;php&#x2F;bin</span><br></pre></td></tr></table></figure>
+
+<p>而在网页中，以上的输出结果为 <code>PHP Version 7.1.11</code> 和 <code>/usr/bin</code></p>
+<p>解决方法： 修改环境变量，将命令行的PHP指向7.1.11 (未成功)</p>
+<p>临时解决方法： 将目前所使用的PHP<strong>软链</strong>到所需的PHP版本（先将原来的php备份）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># which php</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;bin&#x2F;php</span><br><span class="line"># cd &#x2F;usr&#x2F;local&#x2F;bin&#x2F;</span><br><span class="line"># ll | grep php</span><br><span class="line">lrwxrwxrwx  1 root root       12 Nov 13 18:03 php -&gt; &#x2F;usr&#x2F;bin&#x2F;php*</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>/etc/profile</code>文件使其永久性生效，并对所有系统用户生效，在文件末尾加上如下两行代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PHP_HOME&#x3D;&#x2F;usr&#x2F;bin</span><br><span class="line">export PATH&#x3D;$&#123;PATH&#125;:$&#123;PHP_HOME&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后：执行 命令<code>source /etc/profile</code>或 执行点命令 <code>./profile</code>使其修改生效，执行完可通过<code>echo $PATH</code>命令查看是否添加成功。</p>
+<p>目前的解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;bin&#x2F;php &#x2F;root&#x2F;composer.phar update</span><br></pre></td></tr></table></figure>
+
+<p>终极解决方案：删掉所有PHP版本，重装一个，就一个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum remove php-common</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-nginx-配置"><a href="#6-nginx-配置" class="headerlink" title="6. nginx 配置"></a>6. nginx 配置</h3><p>使用socket 连接代替http连接。</p>
+<p>fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;<br>这一行必须要加入到 nginx 的配置文件中，详细见<a target="_blank" rel="noopener" href="http://www.zouzhipeng.com/2017/05/06/centOS%20%E5%AE%89%E8%A3%85%20PHP7/#4-%E6%9F%A5%E7%9C%8B%E6%98%AF%E5%90%A6%E5%B7%B2%E6%AD%A3%E7%A1%AE%E5%AE%89%E8%A3%85">这里</a></p>
+<h2 id="3-其他"><a href="#3-其他" class="headerlink" title="3. 其他"></a>3. 其他</h2><h3 id="1-sublime-正则替换"><a href="#1-sublime-正则替换" class="headerlink" title="1. sublime 正则替换"></a>1. sublime 正则替换</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">From：(\d&#123;11&#125;)</span><br><span class="line">To： &quot;$1&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>From 的每一块都需要加括号</p>
+</blockquote>
+<h3 id="2-hexo-NODE-MODULE-VERSION-冲突"><a href="#2-hexo-NODE-MODULE-VERSION-冲突" class="headerlink" title="2. hexo NODE_MODULE_VERSION 冲突"></a>2. hexo NODE_MODULE_VERSION 冲突</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NODE_MODULE_VERSION 46. This version of Node.js requires NODE_MODULE_VERSION 51. Please try re-compiling or re-installing</span><br></pre></td></tr></table></figure>
+
+<p>I ran into same issue, after updating node 7.x.x.Rebuilding npm rebuild didn’t work either, so After, some digging I was able to resolved it by following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd &#96;which hexo&#39;&#x2F;..&#x2F;..</span><br><span class="line">rm -rvf node_modules</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<p>cd into your hexo-project</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm -rvf node_modules</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/trivia/" rel="tag"># trivia</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/11/18/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%8F%92%E4%BB%B6-dropzone-%E6%8E%A5%E5%85%A5%E6%96%B9%E6%B3%95/" rel="prev" title="文件上传插件 dropzone 接入方法">
+      <i class="fa fa-chevron-left"></i> 文件上传插件 dropzone 接入方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/12/05/%E5%87%A0%E4%B8%AAPHP%E6%95%B0%E7%BB%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/" rel="next" title="几个PHP数组处理方法 & 几个常用的其他方法">
+      几个PHP数组处理方法 & 几个常用的其他方法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Laravel"><span class="nav-number">1.</span> <span class="nav-text">1. Laravel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-TokenMismatchException-in-VerifyCsrfToken-php"><span class="nav-number">1.1.</span> <span class="nav-text">1. TokenMismatchException in VerifyCsrfToken.php</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Tinker"><span class="nav-number">1.2.</span> <span class="nav-text">2. Tinker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Mysql"><span class="nav-number">2.</span> <span class="nav-text">2. Mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%87%8D%E7%BD%AE%E8%A1%A8%E6%A0%BC%E7%B4%A2%E5%BC%95"><span class="nav-number">2.1.</span> <span class="nav-text">1. 重置表格索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-mysql-%E9%80%89%E6%8B%A9%E5%87%BA%E5%A4%9A%E4%B8%AA%E5%AD%97%E6%AE%B5%EF%BC%8C%E6%8C%89%E5%85%B6%E4%B8%AD%E6%9F%90%E4%B8%AA%E5%AD%97%E6%AE%B5distinct"><span class="nav-number">2.2.</span> <span class="nav-text">2. mysql 选择出多个字段，按其中某个字段distinct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9C%88%E4%BB%BD%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.</span> <span class="nav-text">3. 月份实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%AD%A3%E5%88%99"><span class="nav-number">2.4.</span> <span class="nav-text">4.正则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-mysql-%E8%BF%9E%E8%A1%A8%E6%9B%B4%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="nav-number">2.5.</span> <span class="nav-text">5. mysql 连表更新数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%89%8D%E7%AB%AF"><span class="nav-number">3.</span> <span class="nav-text">3. 前端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-jquery-validation-%E9%AA%8C%E8%AF%81-select-%E4%B8%8B%E6%8B%89%E6%A1%86"><span class="nav-number">3.1.</span> <span class="nav-text">1. jquery-validation 验证 select 下拉框</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-textarea"><span class="nav-number">3.2.</span> <span class="nav-text">2. textarea</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Linux-amp-PHP"><span class="nav-number">4.</span> <span class="nav-text">4. Linux &amp; PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E6%89%BE%E5%A4%A7%E6%96%87%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">1. 查找大文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-PHP%E7%9A%84-file-exists-is-dir-is-file"><span class="nav-number">4.2.</span> <span class="nav-text">2. PHP的 file_exists &#x3D; is_dir + is_file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Laravel-%E4%BD%BF%E7%94%A8-model-%E6%96%B9%E5%BC%8F%E5%8F%96%E6%95%B0%E6%8D%AE%EF%BC%8C%E6%A0%87%E8%AE%B0%E4%B8%BA-deleted-at-%E7%9A%84%E8%AE%B0%E5%BD%95%E4%B9%9F%E5%8F%96%E5%87%BA%E6%9D%A5%E4%BA%86%EF%BC%8C%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D"><span class="nav-number">4.3.</span> <span class="nav-text">3. Laravel 使用 model 方式取数据，标记为 deleted_at 的记录也取出来了，如何避免</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BF%AE%E6%94%B9php%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A02M%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">4.4.</span> <span class="nav-text">4. 修改php文件上传2M的限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-could-not-find-driver"><span class="nav-number">4.5.</span> <span class="nav-text">5. could not find driver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-nginx-%E9%85%8D%E7%BD%AE"><span class="nav-number">4.6.</span> <span class="nav-text">6. nginx 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%85%B6%E4%BB%96"><span class="nav-number">5.</span> <span class="nav-text">3. 其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-sublime-%E6%AD%A3%E5%88%99%E6%9B%BF%E6%8D%A2"><span class="nav-number">5.1.</span> <span class="nav-text">1. sublime 正则替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-hexo-NODE-MODULE-VERSION-%E5%86%B2%E7%AA%81"><span class="nav-number">5.2.</span> <span class="nav-text">2. hexo NODE_MODULE_VERSION 冲突</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邹志鹏</p>
+  <div class="site-description" itemprop="description">Yesterday you said tomorrow.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邹志鹏</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
