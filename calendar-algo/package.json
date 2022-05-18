@@ -1,0 +1,20 @@
+{
+  "name": "calendar-algo",
+  "private": true,
+  "scripts": {
+    "build": "slidev build",
+    "dev": "slidev --open",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^0.31.2",
+    "@slidev/theme-bricks": "^0.0.2",
+    "@slidev/theme-default": "*",
+    "@slidev/theme-seriph": "*",
+    "slidev-theme-penguin": "^1.4.0"
+  },
+  "devDependencies": {
+    "@iconify-json/logos": "^1.1.5",
+    "playwright-chromium": "^1.21.1"
+  }
+}
