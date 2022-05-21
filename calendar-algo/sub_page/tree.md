@@ -16,13 +16,13 @@ layout: fact
 
 <img v-click-hide src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/BFS&DFS.png" style="height:50%;position:absolute;top:30%;left:20%" />
 <img v-click='1' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/BFS.gif" style="height:50%;position:absolute;top:30%;left:20%" />
-<img v-click='1' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/DFS.gif" style="height:50%;position:absolute;top:30%;left:50%" />
+<img v-click='2' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/DFS.gif" style="height:50%;position:absolute;top:30%;left:50%" />
 
 ---
 
 # 广度优先遍历 BFS
 
-```go {all|3|7|9|11-15|17|all}
+```go {all|3|4|7-9,16|10|11-15|6,19|all}
 func levelOrder(root *TreeNode) [][]int {
     var res [][]int // 结果集
     queue := list.New() // 辅助队列
@@ -56,7 +56,7 @@ layout: section
 
 ::right::
 
-```go {all|3-4|9|11-16|18|all}
+```go {all|11-16|all}
 func levelOrder(root *TreeNode) [][]int {
     var res [][]int
     queue := list.New()
@@ -211,11 +211,9 @@ layout: section
 
 - 深度优先遍历
 - 广度优先遍历
-  - 前序遍历
-  - 中序遍历
-  - 后序遍历
-- 优先级优先遍历
 
 BFS: 队列
 
 DFS: 栈
+
+图的遍历: 辅助备忘录

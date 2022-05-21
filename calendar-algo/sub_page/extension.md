@@ -1,3 +1,10 @@
+---
+layout: statement
+---
+# Demo
+
+---
+
 ## 可行解: 方案对比
 
 | 顺序      |  方案         | 复杂度      | 时间   | 空间  | 实际尝试次数 | 备注                                         |
@@ -11,9 +18,12 @@
 | 预定义顺序 |所有岛屿剪枝 | 1.04E+19 | 0.63s  | 8MB   | 1528080      | 优化效果明显,稳定输出                        |
 | 贪心| 所有岛屿剪枝       | 2.30E+19 | 0.76s  | 10MB  | 1868136      | 比预定义排序略差 |
 
-
 <style>
     table tr td:nth-child(4) {
+        color: red;
+    }
+
+    table tr:nth-child(7) td:nth-child(7) {
         color: red;
     }
 
@@ -23,6 +33,8 @@
 
 </style>
 
+---
+clicks: 9
 ---
 
 # 拓展 Extension
@@ -58,18 +70,26 @@
 
 ---
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/data_structure_relation.png" style="width:60%;position:absolute;top:15%;left:20%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/data_structure_relation.png" style="height:90%;position:absolute;top:5%;left:13%" />
 
 ---
 
 # 参考资料
 
 - 力扣中国官网
-- labuladong 的算法小抄
 - 数据结构与算法之美
 - 代码随想录
 - 吴师兄学算法
 - 花花酱刷题
+- [完整代码](https://gitlab.futunn.com/joeyzou/joeyzou-demo/-/tree/master/calendar)
+
+## 工具
+
+- [slidev](https://cn.sli.dev/guide/why.html)
+-[bricks](https://github.com/slidevjs/themes/tree/main/packages/theme-bricks)
+- mermaid
+- 懒人词云小程序
+- sketch
 
 ---
 layout: statement

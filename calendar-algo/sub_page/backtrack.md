@@ -40,6 +40,7 @@ func backtrack(路径, 选择列表) {
 <img v-click="2" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46_1.png" style="width:40%;position:absolute;top:30%;left:50%" />
 
 <div v-click="3" style="width:40%;position:absolute;top:70%;left:50%">
+
 1. 路径: 已经做出的选择 [2];
 
 2. 选择列表: 当前可以做出的选择 [1, 3];
@@ -57,7 +58,6 @@ layout: section
 ## 全排列 46 代码
 
 <img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46.png" style="width:40%;position:absolute;top:30%;left:5%" />
-
 
 ::right::
 
@@ -92,8 +92,8 @@ func permute(nums []int) (answer [][]int) {
 
 <img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/deep_blue.jpeg" style="width:40%;position:absolute;top:30%;left:5%" />
 
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/alpha_go.jpeg" style="width:40%;position:absolute;top:25%;left:50%" />
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/alpha_go.jpeg" style="width:40%;position:absolute;top:24%;left:50%" />
 
 ---
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/chess.gif" style="height:85%;position:absolute;top:10%;left:30%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/chess.gif" style="height:100%;position:absolute;top:0%;left:25%" />

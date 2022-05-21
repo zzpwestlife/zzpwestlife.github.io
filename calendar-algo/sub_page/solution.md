@@ -129,7 +129,6 @@ if (minIsland($board) < 5) {
 
 ::right::
 
-
 ```php
 function dropOneShape($board, $oneShape, $x, $y): array
 {
@@ -159,12 +158,7 @@ function dropOneShape($board, $oneShape, $x, $y): array
 
 ### 可行解: 最小岛屿面积剪枝
 
-```php
-/**
- * 空的地方作为岛屿, 找岛屿的最小面积, <5 无效
- * @param array $board
- * @return int
- */
+```php {all|9-11|all}
 function minIsland(array $board): int
 {
     $min = 49;
@@ -188,7 +182,7 @@ function minIsland(array $board): int
 
 ### 可行解: 岛屿面积值剪枝
 
-```php
+```php {all|1-4|all}
 $available = [5, 10, 15, 20, 25, 30, 35, 11, 16, 21, 26, 31, 36, 41];
 if ($shapeName === 'rec') {
     $available = [5, 10, 15, 20, 25, 30, 35];
@@ -198,7 +192,7 @@ if (!isIslandsAvailable($board, $available)) {
 }
 ```
 
-```php
+```php {all|8-11|all}
 function isIslandsAvailable(array $board, array $available): bool
 {
     for ($i = 0; $i < 7; ++$i) {
@@ -226,7 +220,7 @@ layout: section
 
 ::right::
 
-```php
+```php {all|13-14|16-20|all}
 function dfs(array &$board, int $i, int $j): int
 {
     // 越界
@@ -262,7 +256,7 @@ layout: section
 
 ::right::
 
-```php
+```php {all|7-21|all}
 public function aPuzzleEachDay($board, $allShapes): bool
 {
     // some prepare work, like queue
@@ -293,7 +287,7 @@ public function aPuzzleEachDay($board, $allShapes): bool
 
 ### 可行解: 回溯处理队列成员
 
-```php
+```php {all}
 protected function dealWithQueue(SplQueue $queue, array $curShapes, string $curName, int $level, array $allShapes)
 {
     $cur = $queue->dequeue();

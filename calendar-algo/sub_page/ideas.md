@@ -59,9 +59,14 @@ rec36 --> sfs3[...]
 sf1 --> sl1[short_l1]
 sf1 --> sl2[short_l2]
 sf1 --> sls[...]
-```
 
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/doctor.webp" style="height:50%;position:absolute;top:40%;left:30%" />
+sl2 --> ao1[ao1]
+sl2 --> ao2[ao2]
+sl2 --> aos[...]
+
+ao2 --> lf1[long_flash1]
+ao2 --> lfs[...]
+```
 
 ---
 layout: section
@@ -79,7 +84,6 @@ layout: section
 ## 贪心算法
 ## 岛屿问题
 
-
 ---
 layout: fact
 ---
@@ -87,8 +91,7 @@ layout: fact
 <img v-click='1' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/what_is_recursion.png" style="height:20%;position:absolute;top:10%;left:10%" />
 <img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/stairs.png" style="width:50%;position:absolute;top:35%;left:10%" />
 <img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/canon.png" style="height:20%;position:absolute;top:10%;left:40%" />
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/inception.jpeg" style="height:75%;position:absolute;top:10%;left:65%" />
-
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/inception.jpeg" style="height:74.6%;position:absolute;top:10%;left:65%" />
 
 ---
 layout: default
@@ -103,8 +106,7 @@ layout: default
 - GNU = GNU's Not Unix (GNU 不是 Unix)
 - PHP: Hypertext Preprocessor
 
-<h2 v-click>这些都不是真正意义上的递归!!!</h2>
-
+<h2 v-click>这些都不是真正意义上的递归 !!!</h2>
 
 ---
 layout: default
@@ -113,19 +115,19 @@ layout: default
 # 递归 Recursion
 
 ## 递归三要素
+<br>
 
 1. 确定递归函数的参数和返回值
 2. 确定递归终止条件 ，即函数 return 的出口
 3. 确定单层递归的逻辑: 明确每次递归要进行什么操作
 
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/recursion.gif" style="height:50%;position:absolute;top:20%;left:55%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/recursion.gif" style="height:50%;position:absolute;top:20%;left:55%" />
 
 ---
 layout: default
 ---
 
 # 递归 1+2+3+...+100
-
 
 ## 迭代法
 

@@ -69,7 +69,6 @@ boolean inArea(int[][] grid, int r, int c) {
 
 <img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/islands_flag.gif" style="height:50%;position:absolute;top:30%;left:40%" />
 
-
 ---
 layout: section
 ---
