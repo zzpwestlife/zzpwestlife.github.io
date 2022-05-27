@@ -51,26 +51,34 @@ clicks: 9
 
 </v-clicks>
 
-<div v-click-hide="4"><img v-click="3" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/calendar_with_weeks.png" style="height:60%;position:absolute;top:20%;left:40%" /></div>
-
-<div v-click-hide="5"><img v-click="4" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/double-end-BFS.png" style="width:55%;position:absolute;top:30%;left:40%" /></div>
-
-<div v-click-hide="7">
-    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/sudoku.png" style="height:30%;position:absolute;top:20%;left:40%" />
-    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/queens.jpeg" style="height:30%;position:absolute;top:20%;left:60%" />
-    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/huarongdao.jpg" style="height:30%;position:absolute;top:55%;left:40%" />
-    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/number-puzzle.webp" style="height:30%;position:absolute;top:55%;left:60%" />
+<div v-click-hide="4">
+<img v-click="3" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/calendar_with_weeks.png" style="height:60%;position:absolute;top:20%;left:40%"  class="rounded shadow"/>
 </div>
 
-<div v-click-hide="8"><img v-click="7" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/perfect_match.png" style="height:60%;position:absolute;top:20%;left:40%" /></div>
+<div v-click-hide="5">
+<img v-click="4" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/double-end-BFS.png" style="width:55%;position:absolute;top:30%;left:40%" class="rounded shadow" />
+</div>
 
-<div v-click-hide="9"><img v-click="8" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/impossible_1.png" style="height:60%;position:absolute;top:20%;left:40%" /></div>
+<div v-click-hide="7">
+    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/sudoku.png" style="height:30%;position:absolute;top:20%;left:40%" class="rounded shadow" />
+    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/queens.jpeg" style="height:30%;position:absolute;top:20%;left:60%" class="rounded shadow" />
+    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/huarongdao.jpg" style="height:30%;position:absolute;top:55%;left:40%" class="rounded shadow" />
+    <img v-click="6" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/number-puzzle.webp" style="height:30%;position:absolute;top:55%;left:60%" class="rounded shadow" />
+</div>
 
-<img v-click="9" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/impossible_2.png" style="height:60%;position:absolute;top:20%;left:40%" />
+<div v-click-hide="8">
+<img v-click="7" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/perfect_match.png" style="height:60%;position:absolute;top:20%;left:40%" class="" />
+</div>
+
+<div v-click-hide="9">
+<img v-click="8" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/impossible_1.png" style="height:60%;position:absolute;top:20%;left:40%" class="" />
+</div>
+
+<img v-click="9" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/impossible_2.png" style="height:60%;position:absolute;top:20%;left:40%" class="" />
 
 ---
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/data_structure_relation.png" style="height:90%;position:absolute;top:5%;left:13%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/data_structure_relation.png" style="height:90%;position:absolute;top:5%;left:13%" class="rounded shadow" />
 
 ---
 
@@ -90,6 +98,8 @@ clicks: 9
 - mermaid
 - 懒人词云小程序
 - sketch
+
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/calendar.jpeg" style="width:40%;position:absolute;top:30%;left:40%" class="rounded shadow" />
 
 ---
 layout: statement

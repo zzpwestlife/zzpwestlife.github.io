@@ -1,14 +1,14 @@
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/family.png" style="width:90%;position:absolute;top:10%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/family.png" style="width:90%;position:absolute;top:10%;left:5%" class="rounded shadow" />
 
 ---
 layout: section
 ---
 
-# 优化方向: 贪心
+## 优化方向: 贪心
 
 Greedy
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/greedy2.png" style="width:20%;position:absolute;top:60%;left:10%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/greedy2.png" style="width:20%;position:absolute;top:60%;left:10%" class="rounded shadow" />
 
 ::right::
 
@@ -20,11 +20,11 @@ Greedy
 layout: section
 ---
 
-# 优化方向: 剪枝
+## 优化方向: 剪枝
 
 Pruning
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/pruning2.png" style="width:25%;position:absolute;top:60%;left:10%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/pruning2.png" style="width:25%;position:absolute;top:60%;left:10%" class="rounded shadow" />
 
 ::right::
 
@@ -37,7 +37,7 @@ Pruning
 ---
 layout: section
 ---
-# 可行解 Solution
+## 可行解 Solution
 
 ## 伪代码
 
@@ -74,7 +74,7 @@ while (队列不为空) {
 layout: section
 ---
 
-# 可行解 Solution
+## 可行解 Solution
 
 ```php
 $board = [
@@ -116,7 +116,7 @@ return [
 layout: section
 ---
 
-# 可行解 Solution
+## 可行解 Solution
 
 ## 判断一块积木是否可在当前位置放置
 
@@ -214,7 +214,7 @@ function isIslandsAvailable(array $board, array $available): bool
 layout: section
 ---
 
-# 可行解 Solution
+## 可行解 Solution
 
 ## DFS 求最小岛屿面积
 
@@ -248,7 +248,7 @@ function dfs(array &$board, int $i, int $j): int
 layout: section
 ---
 
-# 可行解 Solution
+## 可行解 Solution
 
 ## 最外层的 BFS
 

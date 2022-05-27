@@ -14,7 +14,7 @@ LeetCode 695. 岛屿的最大面积 (Medium)
 
 LeetCode 827. 最大人工岛 (Hard)
 
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/islands.png" style="height:50%;position:absolute;top:30%;left:30%" />
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/islands.png" style="height:50%;position:absolute;top:30%;left:30%" class="rounded shadow" />
 
 ---
 
@@ -34,9 +34,9 @@ func traverse(root *TreeNode) {
 }
 ```
 
-<img v-click="1" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/grid_adjacent.png" style="height:50%;position:absolute;top:24%;left:40%" />
+<img v-click="1" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/grid_adjacent.png" style="height:50%;position:absolute;top:24%;left:40%" class="rounded shadow" />
 
-<img v-click="2" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/grid_return.png" style="height:50%;position:absolute;top:24%;left:32%" />
+<img v-click="2" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/grid_return.png" style="height:50%;position:absolute;top:24%;left:32%" class="rounded shadow" />
 
 ---
 
@@ -67,7 +67,7 @@ boolean inArea(int[][] grid, int r, int c) {
 }
 ```
 
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/islands_flag.gif" style="height:50%;position:absolute;top:30%;left:40%" />
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/islands_flag.gif" style="height:50%;position:absolute;top:30%;left:40%" class="rounded shadow" />
 
 ---
 layout: section
@@ -75,7 +75,7 @@ layout: section
 
 # 岛屿最大面积 695
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/695.png" style="height:50%;position:absolute;top:30%;left:2%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/695.png" style="height:50%;position:absolute;top:30%;left:2%" class="rounded shadow" />
 
 ::right::
 

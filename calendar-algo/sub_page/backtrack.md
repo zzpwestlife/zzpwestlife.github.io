@@ -6,7 +6,7 @@ layout: section
 
 backtrack & pruning
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/pruning.png" style="height:30%;position:absolute;top:40%;left:25%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/pruning.png" style="height:30%;position:absolute;top:40%;left:25%" class="rounded shadow" />
 
 ::right::
 
@@ -33,23 +33,21 @@ func backtrack(路径, 选择列表) {
 
 <!-- ## 全排列 46 -->
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46.png" style="width:40%;position:absolute;top:30%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46.png" style="width:40%;position:absolute;top:30%;left:5%" class="rounded shadow" />
 
-<img v-click="1" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46_0.png" style="width:40%;position:absolute;top:30%;left:50%" />
+<img v-click="1" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46_0.png" style="width:40%;position:absolute;top:30%;left:50%" class="rounded shadow" />
 
-<img v-click="2" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46_1.png" style="width:40%;position:absolute;top:30%;left:50%" />
+<img v-click="2" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46_1.png" style="width:40%;position:absolute;top:30%;left:50%" class="rounded shadow" />
 
 <div v-click="3" style="width:40%;position:absolute;top:70%;left:50%">
 
 1. 路径: 已经做出的选择 [2];
-
 2. 选择列表: 当前可以做出的选择 [1, 3];
-
-3. 结束条件: 到达决策树底层 (叶子节点), 选择列表为空的时候.
+3. 结束条件: 到达决策树底层 (叶子节点).
 
 </div>
 
-<img v-click="4" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46_2.png" style="width:40%;position:absolute;top:30%;left:50%" />
+<img v-click="4" src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46_2.png" style="width:40%;position:absolute;top:30%;left:50%" class="rounded shadow" />
 
 ---
 layout: section
@@ -57,7 +55,7 @@ layout: section
 
 ## 全排列 46 代码
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46.png" style="width:40%;position:absolute;top:30%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/46.png" style="width:40%;position:absolute;top:30%;left:5%" class="rounded shadow" />
 
 ::right::
 
@@ -90,10 +88,10 @@ func permute(nums []int) (answer [][]int) {
 
 ---
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/deep_blue.jpeg" style="width:40%;position:absolute;top:30%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/deep_blue.jpeg" style="width:40%;position:absolute;top:30%;left:5%" class="rounded shadow" />
 
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/alpha_go.jpeg" style="width:40%;position:absolute;top:24%;left:50%" />
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/alpha_go.jpeg" style="width:40%;position:absolute;top:24%;left:50%" class="rounded shadow" />
 
 ---
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/chess.gif" style="height:100%;position:absolute;top:0%;left:25%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/chess.gif" style="height:100%;position:absolute;top:0%;left:25%" class="rounded shadow" />

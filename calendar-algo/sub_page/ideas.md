@@ -1,4 +1,4 @@
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/may_first.png" style="width:70%" class="center-screen" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/may_first.png" style="width:65%" class="center-screen" />
 
 <v-click>
 
@@ -19,15 +19,15 @@ $board = [
 <style>
     .shiki-container {
         position: absolute;
-        top: 22%;
+        top: 25%;
         left: 56%;
         margin-right: -40%;
         transform: translate(-50%, -50%);
     }
 </style>
 
-<arrow v-click x1="650" y1="150" x2="580" y2="70" color="#f00" width="1" arrowSize="1" />
-<arrow v-click x1="545" y1="150" x2="495" y2="105" color="#f00" width="1" arrowSize="1" />
+<arrow v-click x1="650" y1="170" x2="580" y2="90" color="#f00" width="1" arrowSize="1" />
+<arrow v-click x1="545" y1="150" x2="495" y2="125" color="#f00" width="1" arrowSize="1" />
 
 ---
 
@@ -72,26 +72,24 @@ ao2 --> lfs[...]
 layout: section
 ---
 
-# 知识准备 <br> arm yourself
-
-<img v-after src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/learn.png" style="height:20%;position:absolute;top:10%;left:30%" />
+<img v-after src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/learn.png" style="height:20%;position:absolute;top:45%;left:7%" class="rounded shadow" />
 
 ::right::
 
-## 递归和迭代
-## 树和图的遍历 BFS & DFS
-## 回溯和剪枝
-## 贪心算法
-## 岛屿问题
+- 递归和迭代
+- 树和图的遍历 BFS & DFS
+- 回溯和剪枝
+- 贪心算法
+- 岛屿问题
 
 ---
 layout: fact
 ---
 
-<img v-click='1' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/what_is_recursion.png" style="height:20%;position:absolute;top:10%;left:10%" />
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/stairs.png" style="width:50%;position:absolute;top:35%;left:10%" />
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/canon.png" style="height:20%;position:absolute;top:10%;left:40%" />
-<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/inception.jpeg" style="height:74.6%;position:absolute;top:10%;left:65%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/what_is_recursion.png" style="height:20%;position:absolute;top:10%;left:10%" class="rounded shadow" />
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/stairs.png" style="width:50%;position:absolute;top:35%;left:10%" class="rounded shadow" />
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/canon.png" style="height:20%;position:absolute;top:10%;left:40%" class="rounded shadow" />
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/inception.jpeg" style="height:74.6%;position:absolute;top:10%;left:65%" class="rounded shadow" />
 
 ---
 layout: default
@@ -112,22 +110,19 @@ layout: default
 layout: default
 ---
 
-# 递归 Recursion
-
-## 递归三要素
-<br>
+# 递归三要素
 
 1. 确定递归函数的参数和返回值
-2. 确定递归终止条件 ，即函数 return 的出口
+2. 确定递归终止条件, 即函数 return 的出口
 3. 确定单层递归的逻辑: 明确每次递归要进行什么操作
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/recursion.gif" style="height:50%;position:absolute;top:20%;left:55%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/recursion.gif" style="height:50%;position:absolute;top:20%;left:55%" class="rounded shadow" />
 
 ---
 layout: default
 ---
 
-# 递归 1+2+3+...+100
+# 递归: 1+2+3+...+100
 
 ## 迭代法
 
@@ -159,9 +154,10 @@ function sum(int $n): int {
 layout: default
 ---
 
-# n 的阶乘
+# 递归: n 的阶乘
 
-## 递归法
+<br>
+<br>
 
 ```php {all|1,2|3-6|8-9|all}
 // 1. 方法定义, 入参和出参
@@ -178,9 +174,10 @@ function factorial(int $n): int {
 
 ---
 
-# 斐波那契数列的第 n 项
+# 递归: 斐波那契数列的第 n 项
 
-## 递归法
+<br>
+<br>
 
 ```php {all|1,2|3-6|8-9|all}
 // 1. 方法定义, 入参和出参

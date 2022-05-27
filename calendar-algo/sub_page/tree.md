@@ -8,15 +8,15 @@ layout: fact
 
 # 树及其遍历 <br> Tree & Traversal
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/binary_tree.png" style="height:60%;position:absolute;top:30%;left:30%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/binary_tree.png" style="height:60%;position:absolute;top:30%;left:30%" class="rounded shadow" />
 
 ---
 
-## 广度 vs. 深度优先遍历 BFS&DFS
+## 广度 vs. 深度优先遍历 (BFS&DFS)
 
-<img v-click-hide src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/BFS&DFS.png" style="height:50%;position:absolute;top:30%;left:20%" />
-<img v-click='1' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/BFS.gif" style="height:50%;position:absolute;top:30%;left:20%" />
-<img v-click='2' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/DFS.gif" style="height:50%;position:absolute;top:30%;left:50%" />
+<img v-click-hide src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/BFS&DFS.png" style="height:50%;position:absolute;top:30%;left:20%" class="rounded shadow" />
+<img v-click='1' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/BFS.gif" style="height:50%;position:absolute;top:30%;left:20%" class="rounded shadow" />
+<img v-click='2' src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/DFS.gif" style="height:50%;position:absolute;top:30%;left:50%" class="rounded shadow" />
 
 ---
 
@@ -52,7 +52,7 @@ layout: section
 
 ## 二叉树的层序遍历 102
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/102.png" style="width:40%;position:absolute;top:20%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/102.png" style="width:40%;position:absolute;top:20%;left:5%" class="rounded shadow" />
 
 ::right::
 
@@ -108,7 +108,7 @@ layout: section
 
 ## 二叉树的前序遍历 144
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/144.png" style="width:40%;position:absolute;top:25%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/144.png" style="width:40%;position:absolute;top:25%;left:5%" class="rounded shadow" />
 
 ::right::
 
@@ -139,11 +139,13 @@ layout: section
 
 ## 二叉树的最大深度 104
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/104.png" style="width:35%;position:absolute;top:20%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/104.png" style="width:35%;position:absolute;top:20%;left:5%" class="rounded shadow" />
 
 ::right::
 
 ## BFS
+
+<v-click>
 
 ```go {all|7|10,18|19|all}
 func maxDepth(root *TreeNode) int {
@@ -170,17 +172,21 @@ func maxDepth(root *TreeNode) int {
 }
 ```
 
+</v-click>
+
 ---
 layout: section
 ---
 
 ## 二叉树的最大深度 104
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/104.png" style="width:35%;position:absolute;top:20%;left:5%" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/104.png" style="width:35%;position:absolute;top:20%;left:5%" class="rounded shadow" />
 
 ::right::
 
 ## DFS
+
+<v-click>
 
 ```go {all|3|4-6|8-10|all}
 func maxDepth(root *TreeNode) int {
@@ -199,13 +205,15 @@ func maxDepth(root *TreeNode) int {
 }
 ```
 
+</v-click>
+
 ---
 layout: section
 ---
 
 ## 树 图 BFS DFS
 
-小结
+## 小结
 
 ::right::
 

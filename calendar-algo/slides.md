@@ -40,6 +40,7 @@ layout: section
 <a target="_blank" href="https://www.bilibili.com/video/BV1Eb4y177Hs?spm_id_from=333.337.search-card.all.click">
     <img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/calendar.jpeg" style="width:60%" class="center-screen rounded shadow" />
 </a>
+
 <!-- ---
 
 <img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/fish.jpeg" style="width:50%" class="center-screen rounded shadow" />
