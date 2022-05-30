@@ -57,7 +57,7 @@ while (队列不为空) {
     foreach ($queueItems as $item) {
         取出下一块积木, 每一种变形都尝试在当前 board 放置
         foreach ($shapes as $shape) {
-            if (无法放置) { // 剪枝
+            if (无法放置 || 面积不合适) { // 剪枝
                 continue;
             }
             放置, 并将新的 board 入队
@@ -93,7 +93,7 @@ $board = [
 ### 抽象出的积木
 
 ```php
-// 顺序是 'rec', 'short_flash', 'short_l', 'ao', 
+// 预定义排序: 'rec', 'short_flash', 'short_l', 'ao', 
 //       'long_flash', 't', 'long_l', 'less_rec'
 return [
     // 长方形的
@@ -259,7 +259,7 @@ layout: section
 ```php {all|7-21|all}
 public function aPuzzleEachDay($board, $allShapes): bool
 {
-    // some prepare work, like queue
+    // some prepare work, queue, sort etc.
     // 积木名数组, 按解空间从小到大排序 (贪心: 预定义顺序)
     $names = array_keys($allShapes);
     $level = 1; // 当前搜索了几层, 初始化已经有了一层

@@ -20,7 +20,7 @@ layout: fact
 
 ---
 
-# 广度优先遍历 BFS
+# 广度优先/层序遍历 BFS
 
 ```go {all|3|4|7-9,16|11-15|6,19|all}
 func levelOrder(root *TreeNode) [][]int {
@@ -220,8 +220,8 @@ layout: section
 
 ::right::
 
-- 深度优先遍历
 - 广度优先遍历
+- 深度优先遍历
 
 BFS: 队列
 
