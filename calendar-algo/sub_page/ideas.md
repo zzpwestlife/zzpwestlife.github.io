@@ -35,6 +35,8 @@ $board = [
 
 <p v-click class="absolute top-60 left-65 transform" style="font-size:100px;color:deeppink;">46!</p>
 
+<img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/family2.png" style="width:75%" class="center-screen" />
+
 ---
 
 ```mermaid {theme: 'forest', scale: 0.5}
@@ -111,6 +113,8 @@ layout: default
 ---
 
 # 递归三要素
+
+<br>
 
 1. 确定递归函数的参数和返回值
 2. 确定递归终止条件, 即函数 return 的出口

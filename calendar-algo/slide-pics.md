@@ -213,3 +213,5 @@
 
 
 ![greedy](https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/greedy.png)
+
+![family2](https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/family2.png)

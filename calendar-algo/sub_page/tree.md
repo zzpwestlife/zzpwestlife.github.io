@@ -22,7 +22,7 @@ layout: fact
 
 # 广度优先遍历 BFS
 
-```go {all|3|4|7-9,16|10|11-15|6,19|all}
+```go {all|3|4|7-9,16|11-15|6,19|all}
 func levelOrder(root *TreeNode) [][]int {
     var res [][]int // 结果集
     queue := list.New() // 辅助队列
@@ -88,14 +88,17 @@ func levelOrder(root *TreeNode) [][]int {
 
 ## 递归三要素
 
-```go {all|1|2-5|7-10|all}
+<br>
+
+```go {all|1-2|3-6|8-11|all}
+// 1. 方法定义
 func preOrder(root *TreeNode, values *[]int) {
-    // 递归终止条件
+    // 2. 递归终止条件
     if root == nil {
         return
     }
 
-    // 根左右 (前中后序遍历只有这里有区别)
+    // 3. 根左右 (前中后序遍历只有这里有区别)
     *values = append(*values, root.Val)
     preOrder(root.Left, values)
     preOrder(root.Right, values)
@@ -108,7 +111,7 @@ layout: section
 
 ## 二叉树的前序遍历 144
 
-<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/144.png" style="width:40%;position:absolute;top:25%;left:5%" class="rounded shadow" />
+<img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/144.png" style="width:40%;position:absolute;top:28%;left:5%" class="rounded shadow" />
 
 ::right::
 
