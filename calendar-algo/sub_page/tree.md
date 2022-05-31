@@ -2,7 +2,7 @@
 layout: fact
 ---
 
-# 树 图 BFS DFS <br> Tree, Graph
+# 树, 图 BFS DFS <br> Tree, Graph
 
 ---
 

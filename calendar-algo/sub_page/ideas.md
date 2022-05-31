@@ -99,9 +99,9 @@ layout: default
 
 # 递归 Recursion
 
-- 你想知道递归是什么，你得先知道什么是递归.
+- 你想知道递归是什么,你得先知道什么是递归.
 - To understand recursion, you must understand recursion.
-- 从前有座山，山上有座庙，庙里有个老和尚在给小和尚讲故事："从前有座山，山上有座庙，庙里有个老和尚在给小和尚讲故事：……"
+- 从前有座山, 山上有座庙, 庙里有个老和尚在给小和尚讲故事: "从前有座山，山上有座庙，庙里有个老和尚在给小和尚讲故事: ..."
 - Bing = Bing is not google (Bing 不是谷歌)
 - GNU = GNU's Not Unix (GNU 不是 Unix)
 - PHP: Hypertext Preprocessor
@@ -135,7 +135,6 @@ $sum = 0;
 for ($i = 1; $i <= 100; $i++) {
     $sum += $i;
 }
-
 return $sum;
 ```
 
