@@ -92,6 +92,12 @@ func permute(nums []int) (answer [][]int) {
 
 <img v-click src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/alpha_go.jpeg" style="width:40%;position:absolute;top:24%;left:50%" class="rounded shadow" />
 
+<v-click>
+
+[Mastering the game of Go with deep neural networks and tree search](https://www.researchgate.net/publication/292074166_Mastering_the_game_of_Go_with_deep_neural_networks_and_tree_search)
+
+</v-click>
+
 ---
 
 <img src="https://picgo-1253542015.cos.ap-guangzhou.myqcloud.com/uPic/chess.gif" style="height:100%;position:absolute;top:0%;left:25%" class="rounded shadow" />

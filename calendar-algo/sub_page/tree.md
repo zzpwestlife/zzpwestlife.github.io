@@ -223,6 +223,8 @@ layout: section
 - 广度优先遍历
 - 深度优先遍历
 
+BFS <=> DFS
+
 BFS: 队列
 
 DFS: 栈
